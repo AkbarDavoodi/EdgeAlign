@@ -1,39 +1,66 @@
 {
   "edges_list": [
-    ["e1", "e2", "e3", "e4", "e5"],
-    ["g1", "g2", "g3", "g4"],
-    ["f1", "f2", "f3", "f4", "f5", "f6", "f7"],
-    ["k1", "k2", "k3", "k4"]
+                [  # First E-graph
+                {"id": "e1", "type": "alpha"},
+                {"id": "e2", "type": "alpha"},
+                {"id": "e3", "type": "beta"},
+                {"id": "e4", "type": "beta"}
+            ],
+            [  # Second E-graph
+                {"id": "f1", "type": "alpha"},
+                {"id": "f2", "type": "alpha"},
+                {"id": "f3", "type": "alpha"},
+                {"id": "f4", "type": "alpha"},
+                {"id": "f5", "type": "beta"},
+                {"id": "f6", "type": "beta"},
+                {"id": "f7", "type": "beta"}
+            ],
+            [  # Third E-graph
+                {"id": "g1", "type": "alpha"},
+                {"id": "g2", "type": "alpha"},
+                {"id": "g3", "type": "beta"},
+                {"id": "g4", "type": "beta"}
+            ],
+
+            [  # Fourth E-graph
+                {"id": "k1", "type": "beta"},
+                {"id": "k2", "type": "beta"},
+                {"id": "k3", "type": "alpha"},
+                {"id": "k4", "type": "alpha"}
+            ]
+        ]
   ],
   "sets_list": [
-    [
-      ["e1", "e2"],
-      ["e2", "e3"],
-      ["e4", "e3"],
-      ["e1", "e4"]
-    ],
-    [
-      ["g1"],
-      ["g2", "g3"],
-      ["g4", "g3"],
-      ["g1", "g2"],
-      ["g4"]
-    ],
-    [
-      ["f1", "f2", "f5"],
-      ["f2", "f3"],
-      ["f3", "f4"],
-      ["f4", "f1"],
-      ["f5", "f6"],
-      ["f6", "f7"],
-      ["f7"]
-    ],
-    [
-      ["k1"],
-      ["k2", "k3"],
-      ["k4", "k3"],
-      ["k1", "k2"],
-      ["k4"]
-    ]
+            [  # Sets for first E-graph
+                {"edges": ["e1", "e2"], "set_type": "setType1"},
+                {"edges": ["e2", "e3"], "set_type": "setType1"},
+                {"edges": ["e4", "e3"], "set_type": "setType1"},
+                {"edges": ["e1", "e4"], "set_type": "setType2"}
+            ],
+            [  # Sets for second E-graph
+                {"edges": ["f1", "f2", "f5"], "set_type": "setType1"},
+                {"edges": ["f2", "f3"], "set_type": "setType1"},
+                {"edges": ["f3", "f4"], "set_type": "setType1"},
+                {"edges": ["f4", "f1"], "set_type": "setType1"},
+                {"edges": ["f5", "f6"], "set_type": "setType1"},
+                {"edges": ["f6", "f7"], "set_type": "setType2"},
+                {"edges": ["f7"], "set_type": "setType2"}
+            ],
+            [  # Sets for third E-graph
+                {"edges": ["g1"], "set_type": "setType2"},
+                {"edges": ["g2", "g3"], "set_type": "setType1"},
+                {"edges": ["g4", "g3"], "set_type": "setType1"},
+                {"edges": ["g1", "g2"], "set_type": "setType1"},
+                {"edges": ["g4"], "set_type": "setType2"}
+            ],
+
+
+            [  # Sets for fourth E-graph
+                {"edges": ["k1"], "set_type": "setType1"},
+                {"edges": ["k2", "k3"], "set_type": "setType1"},
+                {"edges": ["k4", "k3"], "set_type": "setType1"},
+                {"edges": ["k1", "k2"], "set_type": "setType2"},
+                {"edges": ["k4"], "set_type": "setType2"}
+            ]
   ]
 }
