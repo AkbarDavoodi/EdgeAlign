@@ -157,14 +157,15 @@ def check_implied_edge_matches(
                             alignment_set_type_map[new_w1] = type_v1
                             alignment_set_type_map[new_w2] = type_v2
 
-                            if w1 in set_matches:
+                            if (w1, type_v1) in set_matches:
                                 set_matches[(new_w1, type_v1)] = set_matches.pop((w1, type_v1))
-                            if w2 in set_matches:
+                            if (w2, type_v2) in set_matches:
                                 set_matches[(new_w2, type_v2)] = set_matches.pop((w2, type_v2))
                             logger.debug(f"Updated w1: {new_w1}")
                             logger.debug(f"Updated w2: {new_w2}")
                             updated = True
                             break
+
         if updated:
             logger.debug("One round complete. Restarting iteration due to updates.")
         else:
