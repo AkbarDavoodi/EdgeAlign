@@ -1262,7 +1262,7 @@ def align_multiple_e_graphs(
     num_graphs = len(internal_edges_list)
     for i in range(1, num_graphs):
         current_depth += 1
-        logger.debug(f"Aligning e-graph number {current_depth}")
+        logger.info(f"Aligning e-graph number {current_depth}")
         logger.debug(f"composite_edge_type_map {composite_edge_type_map}")
         logger.debug(f"internal_edges_list[i]: {internal_edges_list[i]}")
         logger.debug(f"edge_type_maps[i]: {edge_type_maps[i]}")
