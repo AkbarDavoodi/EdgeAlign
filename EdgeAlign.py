@@ -374,13 +374,16 @@ def update_alignment_sets(
     type_v1 = set_type_map_1.get(v1)
     type_v2 = set_type_map_1.get(v2)
     type_v3 = set_type_map_1.get(v3)
-
+    
     if set_type_map_1.get(v1) != set_type_map_2.get(u1) or set_type_map_1.get(v2) != set_type_map_2.get(u2) \
             or set_type_map_1.get(v3) != set_type_map_2.get(u3):
-        logger.error(
+        logger.debug(
             f"Candidate sets have mismatched types: {set_type_map_1.get(v1)}, {set_type_map_1.get(v2)}, {set_type_map_1.get(v3)}")
-        logger.error(
+        logger.debug(
             f"Candidate sets have mismatched types: {set_type_map_2.get(u1)}, {set_type_map_2.get(u2)}, {set_type_map_1.get(u3)}")
+        logger.debug(
+            f"Adding ({e1}, {e2}) is inconsistent with the current set_match")
+        raise Exception("Inconsistent with the set_match. alignment branch pruned.")
 
     logger.debug(f"Unique sets for (f1, f2): v1={v1}, v2={v2}, v3={v3}, u1={u1}, u2={u2}, u3={u3}")
     set_match_v1 = any(v1 in match for match in set_matches.values())
