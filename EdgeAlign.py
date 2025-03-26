@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 CompositeEdge = Union[Any, Tuple[Any, ...]]
 
-
 # ----------------- Logging Configuration -----------------
 def configure_logging(log_level: str, log_file: Optional[str] = None) -> None:
     numeric_level = getattr(logging, log_level.upper(), None)
@@ -30,7 +29,6 @@ def configure_logging(log_level: str, log_file: Optional[str] = None) -> None:
     global logger
     logger = logging.getLogger(__name__)
 
-
 # ----------------- Padding Helpers -----------------
 def pad_none(depth: int) -> Optional[Any]:
     """
@@ -41,7 +39,6 @@ def pad_none(depth: int) -> Optional[Any]:
         return None
     else:
         return (pad_none(depth - 1), None)
-
 
 def pad_edge(e: CompositeEdge, current_depth: int) -> CompositeEdge:
     """
@@ -54,7 +51,6 @@ def pad_edge(e: CompositeEdge, current_depth: int) -> CompositeEdge:
     else:
         return (pad_none(current_depth - 1), e)
 
-
 # ----------------- Alignment Utilities -----------------
 def is_complete_edge(edge: CompositeEdge) -> bool:
     """
@@ -65,11 +61,28 @@ def is_complete_edge(edge: CompositeEdge) -> bool:
         return all(is_complete_edge(sub_edge) for sub_edge in edge)
     return edge is not None
 
+# _____________ updating set_maps based on the first coordinate (key)__________
+
+def update_set_type_key(set_type_map: List[Tuple[FrozenSet[Any], str]],
+                        old_key: FrozenSet[Any],
+                        target_type: str,
+                        new_key: FrozenSet[Any]) -> None:
+    for i, (k, v) in enumerate(set_type_map):
+        if k == old_key and v == target_type:
+            set_type_map[i] = (new_key, v)
+            return
+
+# ---------------Helper function to return all types for a given key.
+
+def lookup_all_set_types(set_type_map: List[Tuple[FrozenSet[Any], str]], key: FrozenSet[Any]) -> List[str]:
+    return [v for (k, v) in set_type_map if k == key]
+
 SetMatchValue = Union[
     Tuple[FrozenSet[Any], FrozenSet[Any]],
     Tuple[str, FrozenSet[Any]],
     Tuple[FrozenSet[Any], str]
 ]
+
 
 def check_implied_edge_matches(
         set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
@@ -77,16 +90,16 @@ def check_implied_edge_matches(
         alignment_sets: List[FrozenSet[CompositeEdge]],
         edge_type_map_1: Dict[CompositeEdge, str],
         edge_type_map_2: Dict[CompositeEdge, str],
-        set_type_map_1: Dict[FrozenSet[Any], str],
-        set_type_map_2: Dict[FrozenSet[Any], str],
-        alignment_edge_type_map: Optional[Dict[str, str]] = None,
-        alignment_set_type_map: Optional[Dict[FrozenSet[CompositeEdge], str]] = None
+        set_type_map_1: List[Tuple[FrozenSet[Any], str]],
+        set_type_map_2: List[Tuple[FrozenSet[Any], str]],
+        alignment_edge_type_map: Dict[str, str] = None,
+        alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = None
 ) -> Tuple[
     Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
     List[CompositeEdge],
     List[FrozenSet[CompositeEdge]],
-    Optional[Dict[str, str]],
-    Optional[Dict[FrozenSet[CompositeEdge], str]]
+    Dict[str, str],
+    List[Tuple[FrozenSet[Any], str]]
 ]:
     logger.debug("Checking for implied edge matches with type constraints on edges and sets...")
     updated = True
@@ -96,11 +109,11 @@ def check_implied_edge_matches(
             w1 = w1_entry[0]
             w2 = w2_entry[0]
             if w1 != w2:
-                # Ensure the corresponding sets have matching types.
-                type_v1 = set_type_map_1.get(v1)
-                type_v2 = set_type_map_1.get(v2)
-                type_u1 = set_type_map_2.get(u1)
-                type_u2 = set_type_map_2.get(u2)
+                type_v1 = next((v for (k, v) in set_type_map_1 if k == v1), None)
+                type_v2 = next((v for (k, v) in set_type_map_1 if k == v2), None)
+                type_u1 = next((v for (k, v) in set_type_map_2 if k == u1), None)
+                type_u2 = next((v for (k, v) in set_type_map_2 if k == u2), None)
+
                 logger.debug(
                     f"type_v1:{type_v1}== type_u1:{type_u1}, type_v2:{type_v2}== type_u2:{type_u2}")
 
@@ -141,9 +154,10 @@ def check_implied_edge_matches(
                     if found_candidate:
                         logger.debug(f"alignment_edges: {alignment_edges}")
                         if (e1, e2) not in alignment_edges:
-                        #if not any((e1, e2) in s for s in alignment_sets):
+                            # if not any((e1, e2) in s for s in alignment_sets):
                             logger.debug(f"Found implied edge: ({e1}, {e2})")
-                            logger.debug(f"Found implied edge: ({e1}, {e2}) with edge type '{edge_type_map_1[str(e1)]}'")
+                            logger.debug(
+                                f"Found implied edge: ({e1}, {e2}) with edge type '{edge_type_map_1[str(e1)]}'")
                             alignment_edges.append((e1, e2))
                             alignment_edge_type_map[str((e1, e2))] = edge_type_map_1[str(e1)]
                             updated_w1 = set(w1)
@@ -154,8 +168,8 @@ def check_implied_edge_matches(
                             new_w2 = frozenset(updated_w2)
                             alignment_sets[alignment_sets.index(w1)] = new_w1
                             alignment_sets[alignment_sets.index(w2)] = new_w2
-                            alignment_set_type_map[new_w1] = type_v1
-                            alignment_set_type_map[new_w2] = type_v2
+                            update_set_type_key(alignment_set_type_map, w1, type_v1, new_w1)
+                            update_set_type_key(alignment_set_type_map, w2, type_v2, new_w2)
 
                             if (w1, type_v1) in set_matches:
                                 set_matches[(new_w1, type_v1)] = set_matches.pop((w1, type_v1))
@@ -186,15 +200,15 @@ def update_alignment_sets(
         current_alignment: List[CompositeEdge],
         edge_type_map_1: Dict[CompositeEdge, str],
         edge_type_map_2: Dict[CompositeEdge, str],
-        set_type_map_1: Dict[FrozenSet[Any], str],
-        set_type_map_2: Dict[FrozenSet[Any], str],
+        set_type_map_1: List[Tuple[FrozenSet[Any], str]],
+        set_type_map_2: List[Tuple[FrozenSet[Any], str]],
         alignment_edge_type_map: Dict[str, str],
-        alignment_set_type_map: Optional[Dict[FrozenSet[CompositeEdge], str]] = None
+        alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = None
 ) -> Tuple[
     List[FrozenSet[CompositeEdge]],
     Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
     Dict[str, str],
-    Optional[Dict[FrozenSet[CompositeEdge], str]]
+    List[Tuple[FrozenSet[Any], str]]
 ]:
     # Ensure alignment_set_type_map is initialized.
     if alignment_set_type_map is None:
@@ -221,6 +235,8 @@ def update_alignment_sets(
 
         v1_candidates = [s for s in sets_1 if e1 in s]
         u1_candidates = [s for s in sets_2 if e2 in s]
+        logger.debug(f"v1_candidates={v1_candidates}")
+
         if len(v1_candidates) < 2 or len(u1_candidates) < 2:
             logger.critical("Insufficient candidate sets: fewer than 2 candidates found.")
             raise ValueError("Insufficient candidate sets: each edge must appear in exactly 2 sets.")
@@ -228,12 +244,36 @@ def update_alignment_sets(
         v2 = frozenset(v1_candidates[1])
         u1 = frozenset(u1_candidates[0])
         u2 = frozenset(u1_candidates[1])
-        # Retrieve types from the provided maps.
-        type_v1 = set_type_map_1.get(v1)
-        type_v2 = set_type_map_1.get(v2)
-        type_u1 = set_type_map_2.get(u1)
-        type_u2 = set_type_map_2.get(u2)
+        # # Retrieve types from the provided maps.
+        # For v1 and v2: if they are the same, get both types from the map.
+        if v1 == v2:
+            types_v = lookup_all_set_types(set_type_map_1, v1)
+            if len(types_v) >= 2:
+                type_v1, type_v2 = types_v[0], types_v[1]
+            elif len(types_v) == 1:
+                type_v1 = type_v2 = types_v[0]
+            else:
+                type_v1 = type_v2 = None
+        else:
+            type_v1 = next((v for (k, v) in set_type_map_1 if k == v1), None)
+            type_v2 = next((v for (k, v) in set_type_map_1 if k == v2), None)
+
+        # Similarly for u1 and u2.
+        if u1 == u2:
+            types_u = lookup_all_set_types(set_type_map_2, u1)
+            if len(types_u) >= 2:
+                type_u1, type_u2 = types_u[0], types_u[1]
+            elif len(types_u) == 1:
+                type_u1 = type_u2 = types_u[0]
+            else:
+                type_u1 = type_u2 = None
+        else:
+            type_u1 = next((v for (k, v) in set_type_map_2 if k == u1), None)
+            type_u2 = next((v for (k, v) in set_type_map_2 if k == u2), None)
+
+        logger.debug(f"Candidate: v1={v1}, v2={v2}, u1={u1}, u2={u2}")
         logger.debug(f"Candidate types: v1={type_v1}, v2={type_v2}, u1={type_u1}, u2={type_u2}")
+
 
         ## If the candidate sets in each graph do not differ, we fall back.
         if type_v1 == type_v2 and type_u1 == type_u2:
@@ -242,10 +282,11 @@ def update_alignment_sets(
 
             new_set1 = frozenset({(e1, e2)})
             new_set2 = frozenset({(e1, e2)})
-            label1='--An_Implicit_Label--'
-            label2='--Another_Implicit_Label--'
-            alignment_set_type_map[new_set1] = label1
-            alignment_set_type_map[new_set2] =  label2
+            label1 = '--An_Implicit_Label--'
+            label2 = '--Another_Implicit_Label--'
+            alignment_set_type_map.append((new_set1, label1))
+            alignment_set_type_map.append((new_set2, label2))
+
             # Forward direction:
             set_matches[(new_set1, label1)] = (v1, u1)
             set_matches[(new_set2, label2)] = (v2, u2)
@@ -256,10 +297,10 @@ def update_alignment_sets(
                 w2 = w2_entry[0]
                 if w1 != w2:
                     # Ensure the corresponding sets have matching types.
-                    type_y1 = set_type_map_1.get(y1)
-                    type_y2 = set_type_map_1.get(y2)
-                    type_z1 = set_type_map_2.get(z1)
-                    type_z2 = set_type_map_2.get(z2)
+                    type_y1 = next((v for (k, v) in set_type_map_1 if k == y1), None)
+                    type_y2 = next((v for (k, v) in set_type_map_1 if k == y2), None)
+                    type_z1 = next((v for (k, v) in set_type_map_2 if k == z1), None)
+                    type_z2 = next((v for (k, v) in set_type_map_2 if k == z2), None)
 
                     if type_y1 != type_z1 or type_y2 != type_z2:
                         logger.debug(
@@ -283,6 +324,8 @@ def update_alignment_sets(
             # Backward direction: First we remove
             del set_matches[(new_set1, label1)]
             del set_matches[(new_set2, label2)]
+            alignment_set_type_map = [pair for pair in alignment_set_type_map if pair[0] != new_set1]
+
             labela = '--An_Implicit_Label_A--'
             labelb = '--An_Implicit_Label_B--'
             set_matches[(new_set1, labela)] = (v1, u2)
@@ -293,14 +336,14 @@ def update_alignment_sets(
                 w2 = w2_entry[0]
                 if w1 != w2:
                     # Ensure the corresponding sets have matching types.
-                    type_y1 = set_type_map_1.get(y1)
-                    type_y2 = set_type_map_1.get(y2)
-                    type_z1 = set_type_map_2.get(z1)
-                    type_z2 = set_type_map_2.get(z2)
+                    type_y1 = next((v for (k, v) in set_type_map_1 if k == y1), None)
+                    type_y2 = next((v for (k, v) in set_type_map_1 if k == y2), None)
+                    type_z1 = next((v for (k, v) in set_type_map_2 if k == z1), None)
+                    type_z2 = next((v for (k, v) in set_type_map_2 if k == z2), None)
 
                     if type_y1 != type_z1 or type_y2 != type_z2:
                         logger.debug(
-                            f"Skipping pair {w1} and {w2} due to mismatched set types: {type_v1} vs {type_u1} or {type_v2} vs {type_u2}")
+                            f"Skipping pair {w1} and {w2} due to mismatched set types: {type_y1} vs {type_z1} or {type_y2} vs {type_z2}")
                         continue
                     y1_set, z1_set = frozenset(y1), frozenset(z1)
                     y2_set, z2_set = frozenset(y2), frozenset(z2)
@@ -318,6 +361,7 @@ def update_alignment_sets(
                                         f"Backward set_matches for the isolated edge will result in ({candidate_e1}, {candidate_e2}) with mismatched types ({type1} vs {type2}) which is a forbidden implied edge.")
             del set_matches[(new_set1, labela)]
             del set_matches[(new_set2, labelb)]
+            alignment_set_type_map = [pair for pair in alignment_set_type_map if pair[0] != new_set_1]
 
             if forward and backward:
                 logger.debug(
@@ -330,7 +374,8 @@ def update_alignment_sets(
             new_set = frozenset({(e1, e2)})
             alignment_sets.append(new_set)
             alignment_sets.append(new_set)
-            alignment_set_type_map[new_set] = set_type_map_1.get(frozenset(v1_candidates[0]), type_v1)
+            alignment_set_type_map.append((new_set, type_v1))
+
             return alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
 
         # Now check for valid pairing possibilities.
@@ -343,8 +388,9 @@ def update_alignment_sets(
             # Use composite keys: (alignment_set, type)
             set_matches[(new_set1, type_v1)] = (v1, u1)
             set_matches[(new_set2, type_v2)] = (v2, u2)
-            alignment_set_type_map[new_set1] = type_v1
-            alignment_set_type_map[new_set2] = type_v2
+            alignment_set_type_map.append((new_set1, type_v1))
+            alignment_set_type_map.append((new_set2, type_v2))
+
             logger.debug(f"Created two alignment sets: {new_set1} -> {type_v1}, {new_set2} -> {type_v2}")
             return alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
         elif type_v1 == type_u2 and type_v2 == type_u1:
@@ -355,8 +401,9 @@ def update_alignment_sets(
             alignment_sets.append(new_set2)
             set_matches[(new_set1, type_v1)] = (v1, u2)
             set_matches[(new_set2, type_v2)] = (v2, u1)
-            alignment_set_type_map[new_set1] = type_v1
-            alignment_set_type_map[new_set2] = type_v2
+            alignment_set_type_map.append((new_set1, type_v1))
+            alignment_set_type_map.append((new_set2, type_v2))
+
             logger.debug(f"Created two alignment sets: {new_set1} -> {type_v1}, {new_set2} -> {type_v2}")
             return alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
         else:
@@ -371,16 +418,20 @@ def update_alignment_sets(
     u1 = frozenset(next((s for s in sets_2 if e2 in s and f2 not in s), set()))
     u2 = frozenset(next((s for s in sets_2 if e2 in s and f2 in s), set()))
     u3 = frozenset(next((s for s in sets_2 if f2 in s and e2 not in s), set()))
-    type_v1 = set_type_map_1.get(v1)
-    type_v2 = set_type_map_1.get(v2)
-    type_v3 = set_type_map_1.get(v3)
-    
-    if set_type_map_1.get(v1) != set_type_map_2.get(u1) or set_type_map_1.get(v2) != set_type_map_2.get(u2) \
-            or set_type_map_1.get(v3) != set_type_map_2.get(u3):
+
+    type_v1 = next((v for (k, v) in set_type_map_1 if k == v1), None)
+    type_v2 = next((v for (k, v) in set_type_map_1 if k == v2), None)
+    type_v3 = next((v for (k, v) in set_type_map_1 if k == v3), None)
+
+    type_u1 = next((v for (k, v) in set_type_map_2 if k == u1), None)
+    type_u2 = next((v for (k, v) in set_type_map_2 if k == u2), None)
+    type_u3 = next((v for (k, v) in set_type_map_2 if k == u3), None)
+
+    if type_v1 != type_u1 or type_v2 != type_u2 or type_v3 != type_u3:
         logger.debug(
-            f"Candidate sets have mismatched types: {set_type_map_1.get(v1)}, {set_type_map_1.get(v2)}, {set_type_map_1.get(v3)}")
+            f"Candidate sets have mismatched types: {type_v1}, {type_v2}, {type_v3}")
         logger.debug(
-            f"Candidate sets have mismatched types: {set_type_map_2.get(u1)}, {set_type_map_2.get(u2)}, {set_type_map_1.get(u3)}")
+            f"Candidate sets have mismatched types: {type_u1}, {type_u2}, {type_u3}")
         logger.debug(
             f"Adding ({e1}, {e2}) is inconsistent with the current set_match")
         raise Exception("Inconsistent with the set_match. alignment branch pruned.")
@@ -391,6 +442,7 @@ def update_alignment_sets(
     set_match_v3 = any(v3 in match for match in set_matches.values())
     logger.debug(f"Current set_matches: {set_matches}")
     logger.debug(f"Current alignment_sets: {alignment_sets}")
+    logger.debug(f"Current alignment_set_type_map: {alignment_set_type_map}")
 
     if not set_match_v1 and not set_match_v2 and not set_match_v3:
         logger.debug("Case A: No set-match for v1, v2, or v3.")
@@ -403,7 +455,7 @@ def update_alignment_sets(
             updated_w2.add((e1, e2))
             new_w2 = frozenset(updated_w2)
             alignment_sets[alignment_sets.index(w2)] = new_w2
-            alignment_set_type_map[new_w2] = type_v2
+            update_set_type_key(alignment_set_type_map, w2, type_v2, new_w2)
             logger.debug(f"Updated w2: {frozenset(updated_w2)} (added (e1, e2))")
             logger.debug(f"w3 remains unchanged: {w3}")
             set_matches[(new_w2, type_v2)] = (v2, u2)
@@ -419,8 +471,8 @@ def update_alignment_sets(
             logger.debug(f"current_alignment={current_alignment}")
             w1 = frozenset({(e1, e2)})
             alignment_sets.append(w1)
-            alignment_set_type_map[w1] = type_v1
-            set_matches[(w1,type_v1)] = (v1, u1)
+            alignment_set_type_map.append((w1, type_v1))
+            set_matches[(w1, type_v1)] = (v1, u1)
             logger.debug(f"Created new set w1: {w1}")
         elif v1_aligned_edges_count == 2:
             logger.debug("Additional matching required (g1g2 case)!")
@@ -435,12 +487,12 @@ def update_alignment_sets(
                     updated_w1.add((e1, e2))
                     new_w1 = frozenset(updated_w1)
                     alignment_sets[alignment_sets.index(w1)] = new_w1
-                    alignment_set_type_map[new_w1] = type_v1
+                    update_set_type_key(alignment_set_type_map, w1, type_v1, new_w1)
                     logger.debug(f"Updated w1: {frozenset(updated_w1)} (added (e1, e2))")
                     logger.debug(f"w4 remains unchanged: {w4}")
                     v0 = frozenset(next((s for s in sets_1 if g1 in s and e1 not in s), set()))
                     u0 = frozenset(next((s for s in sets_2 if g2 in s and e2 not in s), set()))
-                    type_v0 = set_type_map_1.get(v0)
+                    type_v0 = next((v for (k, v) in set_type_map_1 if k == v0), None)
                     set_matches[(new_w1, type_v1)] = (v1, u1)
                     set_matches[(w4, type_v0)] = (v0, u0)
                     logger.debug(f"Updated set_matches: w1 -> (v1, u1), w4 -> (v0, u0)")
@@ -454,7 +506,7 @@ def update_alignment_sets(
                 updated_w1.add((e1, e2))
                 new_w1 = frozenset(updated_w1)
                 alignment_sets[alignment_sets.index(w1)] = new_w1
-                alignment_set_type_map[new_w1] = type_v1
+                update_set_type_key(alignment_set_type_map, w1, type_v1, new_w1)
                 set_matches[(new_w1, type_v1)] = set_matches.pop((w1, type_v1))
                 logger.debug(f"Updated w1: {frozenset(updated_w1)} (added (e1, e2))")
             singleton_sets = [s for s in alignment_sets if s == frozenset({(f1, f2)})]
@@ -465,7 +517,7 @@ def update_alignment_sets(
                 updated_w2.add((e1, e2))
                 new_w2 = frozenset(updated_w2)
                 alignment_sets[alignment_sets.index(w2)] = new_w2
-                alignment_set_type_map[new_w2] = type_v2
+                update_set_type_key(alignment_set_type_map, w2, type_v2, new_w2)
                 set_matches[(new_w2, type_v2)] = (v2, u2)
                 set_matches[(w3, type_v3)] = (v3, u3)
                 logger.debug(f"Updated w2: {frozenset(updated_w2)}")
@@ -482,13 +534,13 @@ def update_alignment_sets(
                 updated_w2.add((e1, e2))
                 new_w2 = frozenset(updated_w2)
                 alignment_sets[alignment_sets.index(w2)] = new_w2
-                alignment_set_type_map[new_w2] = type_v2
-                set_matches[(new_w2, type_v2)] = set_matches.pop((w2,type_v2))
+                update_set_type_key(alignment_set_type_map, w2, type_v2, new_w2)
+                set_matches[(new_w2, type_v2)] = set_matches.pop((w2, type_v2))
                 logger.debug(f"Updated w2: {frozenset(updated_w2)} (added (e1, e2))")
             if len(v1_aligned_edges) == 1:
                 w1 = frozenset({(e1, e2)})
                 alignment_sets.append(w1)
-                alignment_set_type_map[w1] = type_v1
+                alignment_set_type_map.append((w1, type_v1))
                 set_matches[(w1, type_v1)] = (v1, u1)
                 logger.debug(f"Created new set w1: {w1}")
             elif len(v1_aligned_edges) == 2:
@@ -505,16 +557,17 @@ def update_alignment_sets(
                         updated_w1.add((e1, e2))
                         new_w1 = frozenset(updated_w1)
                         alignment_sets[alignment_sets.index(w1)] = new_w1
-                        alignment_set_type_map[new_w1] = type_v1
+                        update_set_type_key(alignment_set_type_map, w1, type_v1, new_w1)
                         set_matches[(new_w1, type_v1)] = (v1, u1)
                         v0 = frozenset(next((s for s in sets_1 if g1 in s and e1 not in s), set()))
                         u0 = frozenset(next((s for s in sets_2 if g2 in s and e2 not in s), set()))
-                        type_v0 = set_type_map_1.get(v0)
+                        type_v0 = next((v for (k, v) in set_type_map_1 if k == v0), None)
                         set_matches[(w4, type_v0)] = (v0, u0)
                         logger.debug(f"Updated set_matches: w1 -> (v1, u1), w4 -> (v0, u0)")
     logger.debug(f"Final alignment (current_alignment): {current_alignment}")
     logger.debug(f"Final alignment_sets: {alignment_sets}")
     logger.debug(f"Final set_matches: {set_matches}")
+    logger.debug(f"Final alignment_set_type_map: {alignment_set_type_map}")
     return alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
 
 
@@ -523,22 +576,20 @@ def handling_set_matches_isolated_edges(
         alignment_sets: List[FrozenSet[CompositeEdge]],
         set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
         alignment_edge_type_map: Dict[str, str],
-        alignment_set_type_map: Dict[FrozenSet[CompositeEdge], str],
+        alignment_set_type_map: List[Tuple[FrozenSet[Any], str]],
         sets_1: List[Set[Any]],
         sets_2: List[Set[Any]],
         edge_type_map_1: Dict[CompositeEdge, str],
         edge_type_map_2: Dict[CompositeEdge, str],
-        set_type_map_1: Dict[FrozenSet[Any], str],
-        set_type_map_2: Dict[FrozenSet[Any], str]
+        set_type_map_1: List[Tuple[FrozenSet[Any], str]],
+        set_type_map_2: List[Tuple[FrozenSet[Any], str]]
 ) -> Tuple[
     List[CompositeEdge],
     List[FrozenSet[CompositeEdge]],
     Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
     Dict[str, str],
-    Dict[FrozenSet[CompositeEdge], str]
+    List[Tuple[FrozenSet[Any], str]]
 ]:
-
-
     logger.debug("Handling isolated edges in set_matches (undecided direction).")
 
     def edge_already_decided(edge, set_matches):
@@ -551,11 +602,10 @@ def handling_set_matches_isolated_edges(
         for (alignment_set, _), (v_candidate, u_candidate) in set_matches.items():
             if len(alignment_set) == 1:
                 candidate = next(iter(alignment_set))
-                # Here we check if the candidate's first coordinate equals e1
-                # or candidate's second coordinate equals e2.
                 if candidate[0] == e1 or candidate[1] == e2:
                     return True
         return False
+
     # First, extract candidate isolated edges.
     # We consider an alignment set isolated if it is a singleton.
     isolated_edge_sets = [s for s in alignment_sets if len(s) == 1]
@@ -585,10 +635,10 @@ def handling_set_matches_isolated_edges(
         u1 = frozenset(u1_candidates[0])
         u2 = frozenset(u1_candidates[1])
 
-        type_v1 = set_type_map_1.get(v1)
-        type_v2 = set_type_map_1.get(v2)
-        type_u1 = set_type_map_2.get(u1)
-        type_u2 = set_type_map_2.get(u2)
+        type_v1 = next((v for (k, v) in set_type_map_1 if k == v1), None)
+        type_v2 = next((v for (k, v) in set_type_map_1 if k == v2), None)
+        type_u1 = next((v for (k, v) in set_type_map_2 if k == u1), None)
+        type_u2 = next((v for (k, v) in set_type_map_2 if k == u2), None)
 
         logger.debug(
             f"For isolated edge {edge}: Candidate types: v1={type_v1}, v2={type_v2}, u1={type_u1}, u2={type_u2}")
@@ -608,10 +658,11 @@ def handling_set_matches_isolated_edges(
         # Check all pairings in set_matches for forbidden implied edges.
         for (w1_entry, (y1, z1)), (w2_entry, (y2, z2)) in combinations(set_matches.items(), 2):
             if w1_entry[0] != w2_entry[0]:
-                type_y1 = set_type_map_1.get(y1)
-                type_y2 = set_type_map_1.get(y2)
-                type_z1 = set_type_map_2.get(z1)
-                type_z2 = set_type_map_2.get(z2)
+                type_y1 = next((v for (k, v) in set_type_map_1 if k == y1), None)
+                type_y2 = next((v for (k, v) in set_type_map_1 if k == y2), None)
+                type_z1 = next((v for (k, v) in set_type_map_2 if k == z1), None)
+                type_z2 = next((v for (k, v) in set_type_map_2 if k == z2), None)
+
                 # Skip if types do not match already.
                 if type_y1 != type_z1 or type_y2 != type_z2:
                     continue
@@ -636,10 +687,10 @@ def handling_set_matches_isolated_edges(
         set_matches[(new_set_backward, 'backward2')] = (v2, u1)
         for (w1_entry, (y1, z1)), (w2_entry, (y2, z2)) in combinations(set_matches.items(), 2):
             if w1_entry[0] != w2_entry[0]:
-                type_y1 = set_type_map_1.get(y1)
-                type_y2 = set_type_map_1.get(y2)
-                type_z1 = set_type_map_2.get(z1)
-                type_z2 = set_type_map_2.get(z2)
+                type_y1 = next((v for (k, v) in set_type_map_1 if k == y1), None)
+                type_y2 = next((v for (k, v) in set_type_map_1 if k == y2), None)
+                type_z1 = next((v for (k, v) in set_type_map_2 if k == z1), None)
+                type_z2 = next((v for (k, v) in set_type_map_2 if k == z2), None)
                 if type_y1 != type_z1 or type_y2 != type_z2:
                     continue
                 y1_set, z1_set = frozenset(y1), frozenset(z1)
@@ -708,33 +759,34 @@ def find_best_alignment(
         current_depth: int,
         edge_type_map_1: Dict[CompositeEdge, str],
         edge_type_map_2: Dict[CompositeEdge, str],
-        set_type_map_1: Dict[FrozenSet[Any], str],
-        set_type_map_2: Dict[FrozenSet[Any], str]
+        set_type_map_1: List[Tuple[FrozenSet[Any], str]],
+        set_type_map_2: List[Tuple[FrozenSet[Any], str]]
 ) -> Tuple[
-    List[CompositeEdge],                                   # alignment_edges
-    List[FrozenSet[CompositeEdge]],                        # alignment_sets
-    int,                                                     # max_cost
-    Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],   # set_matches
-    Dict[str, str],                              # alignment_edge_type_map
-    Dict[FrozenSet[CompositeEdge], str]                     # alignment_set_type_map
+    List[CompositeEdge],  # alignment_edges
+    List[FrozenSet[CompositeEdge]],  # alignment_sets
+    int,  # max_cost
+    Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],  # set_matches
+    Dict[str, str],  # alignment_edge_type_map
+    List[Tuple[FrozenSet[Any], str]]  # alignment_set_type_map
 ]:
     best_alignment: List[CompositeEdge] = []
     best_alignment_sets: List[FrozenSet[CompositeEdge]] = []
     best_set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue] = {}
     best_alignment_edge_type_map: Dict[str, str] = {}
-    best_alignment_set_type_map: Dict[FrozenSet[CompositeEdge], str] = {}
+    best_alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = []
     max_cost = 0
 
     alignment_sets: List[FrozenSet[CompositeEdge]] = []
     set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue] = {}
     alignment_edge_type_map: Dict[str, str] = {}
-    alignment_set_type_map: Dict[FrozenSet[CompositeEdge], str] = {}
+    alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = []
 
     def is_feasible_extension(e1: CompositeEdge, e2: CompositeEdge, current_alignment: List[CompositeEdge],
                               sets_1: List[Set[Any]], sets_2: List[Set[Any]]) -> bool:
         # Check that the edge types match.
         if edge_type_map_1.get(str(e1)) != edge_type_map_2.get(str(e2)):
-            logger.debug(f"Edge type mismatch: {e1} is {edge_type_map_1.get(str(e1))} vs {e2} is {edge_type_map_2.get(str(e2))}")
+            logger.debug(
+                f"Edge type mismatch: {e1} is {edge_type_map_1.get(str(e1))} vs {e2} is {edge_type_map_2.get(str(e2))}")
             return False
 
         if e1 is None or e2 is None:
@@ -748,9 +800,21 @@ def find_best_alignment(
             logger.error("Error: Each edge must appear in exactly 2 sets (E-graph requirement)")
             return False
 
-        # Check that the endpoint types match.
-        types1 = frozenset(set_type_map_1.get(frozenset(s)) for s in incident_sets_1)
-        types2 = frozenset(set_type_map_2.get(frozenset(s)) for s in incident_sets_2)
+        types1 = frozenset(
+            t
+            for s in incident_sets_1
+            for t in lookup_all_set_types(set_type_map_1, frozenset(s))
+        )
+        types2 = frozenset(
+            t
+            for s in incident_sets_2
+            for t in lookup_all_set_types(set_type_map_2, frozenset(s))
+        )
+
+        logger.debug(f"set_type_map_1={set_type_map_1}")
+        logger.debug(f"incident_sets_1={incident_sets_1}")
+        logger.debug(f"incident_sets_2={incident_sets_2}")
+
         logger.debug(f"types1={types1}")
         logger.debug(f"types2={types2}")
         if types1 != types2:
@@ -806,8 +870,6 @@ def find_best_alignment(
             best_alignment_edge_type_map = deepcopy(alignment_edge_type_map)
             best_alignment_set_type_map = deepcopy(alignment_set_type_map)
 
-        #previous_edge_type_map = deepcopy(alignment_edge_type_map)
-
         for e1 in list(frontier_edges_1):
             for e2 in list(frontier_edges_2):
                 logger.debug(f"EXPLORING candidate edge pair ({e1}, {e2})")
@@ -846,14 +908,13 @@ def find_best_alignment(
                         alignment_set_type_map = previous_set_type_map
                         continue
 
-                    alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
+                    # alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
                     logger.debug(f"Updated after adding ({e1}, {e2}):")
                     logger.debug(f"  Alignment Sets: {alignment_sets}")
                     logger.debug(f"  Set Matches: {set_matches}")
                     logger.debug(f"  Alignment Edge Types: {alignment_edge_type_map}")
                     logger.debug(f"  Alignment Set Types: {alignment_set_type_map}")
                     logger.debug(f"  Alignment edges: {current_alignment}")
-
 
                     matched_edges_1.add(e1)
                     matched_edges_2.add(e2)
@@ -902,20 +963,22 @@ def find_best_alignment(
     logger.debug(f"BEST alignment_set_type_map: {best_alignment_set_type_map}")
 
     best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map = handling_set_matches_isolated_edges(
-        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map,
+        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map,
+        best_alignment_set_type_map,
         sets_1, sets_2,
         edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2
     )
 
     best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map = refine_alignment_with_unaligned_edges(
-        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map, sets_1, sets_2,
+        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map,
+        best_alignment_set_type_map, sets_1, sets_2,
         set(edges_1), set(edges_2), current_depth,
         edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2
     )
 
     logger.debug(f"Best alignment after refinement: {best_alignment}")
     logger.debug(f"Alignment Sets: {best_alignment_sets}")
-    logger.debug(f"Cost: {max_cost}")
+    logger.info(f"Cost: {max_cost}")
     logger.debug(f"Set Matches: {best_set_matches}")
     logger.debug(f"Alignment Edge Types: {best_alignment_edge_type_map}")
     logger.debug(f"Alignment Set Types: {best_alignment_set_type_map}")
@@ -928,7 +991,7 @@ def refine_alignment_with_unaligned_edges(
         alignment_sets: List[FrozenSet[CompositeEdge]],
         set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
         alignment_edge_type_map: Dict[str, str],
-        alignment_set_type_map: Dict[FrozenSet[CompositeEdge], str],
+        alignment_set_type_map: List[Tuple[FrozenSet[Any], str]],
         sets_1: List[Set[Any]],
         sets_2: List[Set[Any]],
         edges_1: Set[CompositeEdge],
@@ -936,20 +999,18 @@ def refine_alignment_with_unaligned_edges(
         current_depth: int,
         edge_type_map_1: Dict[CompositeEdge, str],
         edge_type_map_2: Dict[CompositeEdge, str],
-        set_type_map_1: Dict[FrozenSet[Any], str],
-        set_type_map_2: Dict[FrozenSet[Any], str]
+        set_type_map_1: List[Tuple[FrozenSet[Any], str]],
+        set_type_map_2: List[Tuple[FrozenSet[Any], str]]
 ) -> Tuple[
     List[CompositeEdge],
     List[FrozenSet[CompositeEdge]],
     Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
     Dict[str, str],
-    Dict[FrozenSet[CompositeEdge], str]
+    List[Tuple[FrozenSet[Any], str]]
 ]:
     logger.debug("=== START PROCESSING UNALIGNED EDGES IN FIRST E-GRAPH ===")
     logger.debug(f"set_matches: {set_matches}")
     logger.debug(f"alignment_edges: {alignment_edges}")
-
-    alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
 
     aligned_edges_1 = {e1 for e1, _ in alignment_edges}
     U1 = set(edges_1) - aligned_edges_1
@@ -971,13 +1032,14 @@ def refine_alignment_with_unaligned_edges(
 
             endpoint_1, endpoint_2 = endpoint_sets
 
-            type_ep1 = set_type_map_1.get(frozenset(endpoint_1))
-            type_ep2 = set_type_map_1.get(frozenset(endpoint_2))
+            type_ep1 = next((v for (k, v) in set_type_map_1 if k == frozenset(endpoint_1)), None)
+            type_ep2 = next((v for (k, v) in set_type_map_1 if k == frozenset(endpoint_2)), None)
 
             w1_entry = next(
                 ((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items() if g == frozenset(endpoint_1)), None)
             w2_entry = next(
                 ((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items() if g == frozenset(endpoint_2)), None)
+
             # If found, unpack the alignment set part.
             w1 = w1_entry[0] if w1_entry else None
             w2 = w2_entry[0] if w2_entry else None
@@ -985,16 +1047,21 @@ def refine_alignment_with_unaligned_edges(
 
             if w1 and w2:
                 logger.debug(f"Adding ({e}, None) to two related sets.")
+
                 updated_w1 = set(w1)
                 updated_w2 = set(w2)
+
                 updated_w1.add((e, None))
                 updated_w2.add((e, None))
+
                 new_w1 = frozenset(updated_w1)
                 new_w2 = frozenset(updated_w2)
+
                 alignment_sets[alignment_sets.index(w1)] = new_w1
                 alignment_sets[alignment_sets.index(w2)] = new_w2
-                alignment_set_type_map[new_w1] = type_ep1
-                alignment_set_type_map[new_w2] = type_ep2
+
+                update_set_type_key(alignment_set_type_map, w1, type_ep1, new_w1)
+                update_set_type_key(alignment_set_type_map, w2, type_ep2, new_w2)
 
                 if w1_entry is not None and (w1, w1_entry[1]) in set_matches:
                     old_value = set_matches.pop((w1, w1_entry[1]))
@@ -1024,8 +1091,10 @@ def refine_alignment_with_unaligned_edges(
                 updated_w = set(existing_w)
                 updated_w.add((e, None))
                 new_w = frozenset(updated_w)
+
                 alignment_sets[alignment_sets.index(existing_w)] = new_w
-                alignment_set_type_map[new_w] = existing_entry[1]
+                update_set_type_key(alignment_set_type_map, existing_w, existing_entry[1], new_w)
+
                 matching_entry = next(((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items()
                                        if g == frozenset(endpoint_1 if w1_entry else endpoint_2)), None)
                 logger.debug(f"matching_entry = {matching_entry}")
@@ -1042,11 +1111,11 @@ def refine_alignment_with_unaligned_edges(
                 alignment_sets.append(new_other_w)
 
                 if w1_entry:
-                    alignment_set_type_map[new_other_w] = type_ep2
+                    alignment_set_type_map.append((new_other_w, type_ep2))
                     set_matches[(new_other_w, type_ep2)] = (frozenset(endpoint_2), 'nothing')
                     logger.debug(f"Created new set_matches entry: {new_other_w} -> ({endpoint_2}, 'nothing')")
                 else:
-                    alignment_set_type_map[new_other_w] = type_ep1
+                    alignment_set_type_map.append((new_other_w, type_ep1))
                     set_matches[(new_other_w, type_ep1)] = (frozenset(endpoint_1), 'nothing')
                     logger.debug(f"Created new set_matches entry: {new_other_w} -> ({endpoint_1}, 'nothing')")
 
@@ -1062,8 +1131,6 @@ def refine_alignment_with_unaligned_edges(
         if not progress:
             logger.error(f"Could not find a related set for any of {U1} in first E-graph.")
             break
-
-    alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
 
     logger.debug("=== START PROCESSING UNALIGNED EDGES IN SECOND E-GRAPH ===")
     logger.debug(f"alignment_sets = {alignment_sets}")
@@ -1091,8 +1158,8 @@ def refine_alignment_with_unaligned_edges(
 
             endpoint_1, endpoint_2 = endpoint_sets
 
-            type_ep1 = set_type_map_2.get(frozenset(endpoint_1))
-            type_ep2 = set_type_map_2.get(frozenset(endpoint_2))
+            type_ep1 = next((v for (k, v) in set_type_map_2 if k == frozenset(endpoint_1)), None)
+            type_ep2 = next((v for (k, v) in set_type_map_2 if k == frozenset(endpoint_2)), None)
 
             w1_entry = next(
                 ((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items() if h == frozenset(endpoint_1)), None)
@@ -1108,15 +1175,20 @@ def refine_alignment_with_unaligned_edges(
                 logger.debug(f"Adding (None, {e}) to two related sets.")
                 updated_w1 = set(w1)
                 updated_w2 = set(w2)
+
                 new_edge = pad_edge(e, current_depth)
+
                 updated_w1.add(new_edge)
                 updated_w2.add(new_edge)
+
                 new_w1 = frozenset(updated_w1)
                 new_w2 = frozenset(updated_w2)
+
                 alignment_sets[alignment_sets.index(w1)] = new_w1
                 alignment_sets[alignment_sets.index(w2)] = new_w2
-                alignment_set_type_map[new_w1] = type_ep1
-                alignment_set_type_map[new_w2] = type_ep2
+
+                update_set_type_key(alignment_set_type_map, w1, type_ep1, new_w1)
+                update_set_type_key(alignment_set_type_map, w2, type_ep2, new_w2)
 
                 if w1_entry is not None and (w1, w1_entry[1]) in set_matches:
                     old_value = set_matches.pop((w1, w1_entry[1]))
@@ -1147,10 +1219,12 @@ def refine_alignment_with_unaligned_edges(
                 updated_w.add(pad_edge(e, current_depth))
                 new_w = frozenset(updated_w)
                 alignment_sets[alignment_sets.index(existing_w)] = new_w
-                alignment_set_type_map[new_w] = existing_entry[1]
+                update_set_type_key(alignment_set_type_map, existing_w, existing_entry[1], new_w)
+
                 matching_entry = next(((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items()
                                        if h == frozenset(endpoint_1 if w1_entry else endpoint_2)), None)
                 logger.debug(f"matching_entry = {matching_entry}")
+
                 if matching_entry:
                     old_value = set_matches.pop(matching_entry)
                     set_matches[(new_w, matching_entry[1])] = old_value
@@ -1163,11 +1237,12 @@ def refine_alignment_with_unaligned_edges(
                 alignment_sets.append(new_other_w)
 
                 if w1_entry:
-                    alignment_set_type_map[new_other_w] = type_ep2
+                    alignment_set_type_map.append((new_other_w, type_ep2))
+
                     set_matches[(new_other_w, type_ep2)] = ('nothing', frozenset(endpoint_2))
                     logger.debug(f"Created new set_matches entry: {new_other_w} -> ('nothing', {endpoint_2})")
                 else:
-                    alignment_set_type_map[new_other_w] = type_ep1
+                    alignment_set_type_map.append((new_other_w, type_ep1))
                     set_matches[(new_other_w, type_ep1)] = ('nothing', frozenset(endpoint_1))
                     logger.debug(f"Created new set_matches entry: {new_other_w} -> ('nothing', {endpoint_1})")
 
@@ -1185,7 +1260,6 @@ def refine_alignment_with_unaligned_edges(
             logger.error(f"Could not find a related set for any of {U2} in second E-graph.")
             break
 
-    alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
     logger.debug("=== FINISHED PROCESSING UNALIGNED EDGES ===")
     logger.debug(f"Final alignment_edges: {alignment_edges}")
     logger.debug(f"Final alignment_sets: {alignment_sets}")
@@ -1202,7 +1276,7 @@ def align_multiple_e_graphs(
     List[FrozenSet[CompositeEdge]],
     Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue],
     Dict[str, str],
-    Dict[FrozenSet[CompositeEdge], str]
+    List[Tuple[FrozenSet[Any], str]]
 ]:
     # Convert each e-graph's edge list (list of dicts) into a list of edge IDs and an edge type map.
     internal_edges_list = []
@@ -1222,11 +1296,11 @@ def align_multiple_e_graphs(
     set_type_maps = []
     for s_graph in sets_list:
         internal_sets = []
-        set_type_map = {}
+        set_type_map = []
         for s in s_graph:
             edge_set = frozenset(s["edges"])
             internal_sets.append(edge_set)
-            set_type_map[edge_set] = s.get("set_type")
+            set_type_map.append((edge_set, s.get("set_type")))
         internal_sets_list.append(internal_sets)
         set_type_maps.append(set_type_map)
 
@@ -1250,7 +1324,7 @@ def align_multiple_e_graphs(
                 singleton = frozenset({edge})
                 graph_sets.append(singleton)
                 graph_sets.append(singleton)
-                set_type_maps[i][singleton] = None
+                set_type_maps[i].append((singleton, None))
             elif appearance_count != 2:
                 raise ValueError(
                     f"In e-graph {i}, edge '{edge}' appears {appearance_count} times. Each edge must appear in either 0 or 2 sets."
@@ -1260,7 +1334,10 @@ def align_multiple_e_graphs(
     composite_edges = internal_edges_list[0]
     composite_sets = internal_sets_list[0]
     composite_edge_type_map = edge_type_maps[0]
+
     composite_set_type_map = set_type_maps[0]
+    logger.debug(f"composite_set_type_map {composite_set_type_map}")
+
     composite_set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue] = {}
     current_depth = 1
     num_graphs = len(internal_edges_list)
@@ -1338,74 +1415,58 @@ def main() -> None:
     else:
 
         edges_list = [
-            [  # First E-graph
-                {"id": "e1", "type": "alpha"},
-                {"id": "e2", "type": "alpha"},
-                {"id": "e3", "type": "beta"},
-                {"id": "e4", "type": "beta"}
-            ],
-            [  # Second E-graph
-                {"id": "f1", "type": "alpha"},
-                {"id": "f2", "type": "alpha"},
-                {"id": "f3", "type": "alpha"},
-                {"id": "f4", "type": "alpha"},
-                {"id": "f5", "type": "beta"},
-                {"id": "f6", "type": "beta"},
-                {"id": "f7", "type": "beta"}
-            ],
-            [  # Third E-graph
-                {"id": "g1", "type": "alpha"},
-                {"id": "g2", "type": "alpha"},
-                {"id": "g3", "type": "beta"},
-                {"id": "g4", "type": "beta"}
-            ],
+            [{'id': 'a1', 'type': 'SINGLE'}, {'id': 'a2', 'type': 'DOUBLE'}, {'id': 'a3', 'type': 'SINGLE'},
+             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'SINGLE'}],
 
-            [  # Fourth E-graph
-                {"id": "k1", "type": "beta"},
-                {"id": "k2", "type": "beta"},
-                {"id": "k3", "type": "alpha"},
-                {"id": "k4", "type": "alpha"}
-            ]
+
+            [{'id': 'b1', 'type': 'SINGLE'}, {'id': 'b2', 'type': 'DOUBLE'}, {'id': 'b3', 'type': 'SINGLE'},
+             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'DOUBLE'}, {'id': 'b6', 'type': 'SINGLE'}],
+
+            [{'id': 'c1', 'type': 'SINGLE'}, {'id': 'c2', 'type': 'SINGLE'}, {'id': 'c3', 'type': 'SINGLE'},
+             {'id': 'c4', 'type': 'SINGLE'}, {'id': 'c5', 'type': 'SINGLE'}, {'id': 'c6', 'type': 'DOUBLE'},
+             {'id': 'c7', 'type': 'SINGLE'}],
+            #
+            [{'id': 'd1', 'type': 'DOUBLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'SINGLE'},
+             {'id': 'd4', 'type': 'DOUBLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'DOUBLE'},
+             {'id': 'd7', 'type': 'SINGLE'}],
+            #
+            [{'id': 'e1', 'type': 'DOUBLE'}, {'id': 'e2', 'type': 'SINGLE'}, {'id': 'e3', 'type': 'SINGLE'},
+             {'id': 'e4', 'type': 'DOUBLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'},
+             {'id': 'e7', 'type': 'SINGLE'}, {'id': 'e8', 'type': 'SINGLE'}]
+
         ]
-
         sets_list = [
-            [  # Sets for first E-graph
-                {"edges": ["e1", "e2"], "set_type": "setType1"},
-                {"edges": ["e2", "e3"], "set_type": "setType1"},
-                {"edges": ["e4", "e3"], "set_type": "setType1"},
-                {"edges": ["e1", "e4"], "set_type": "setType2"}
-            ],
-            [  # Sets for second E-graph
-                {"edges": ["f1", "f2", "f5"], "set_type": "setType1"},
-                {"edges": ["f2", "f3"], "set_type": "setType1"},
-                {"edges": ["f3", "f4"], "set_type": "setType1"},
-                {"edges": ["f4", "f1"], "set_type": "setType1"},
-                {"edges": ["f5", "f6"], "set_type": "setType1"},
-                {"edges": ["f6", "f7"], "set_type": "setType2"},
-                {"edges": ["f7"], "set_type": "setType2"}
-            ],
-            [  # Sets for third E-graph
-                {"edges": ["g1"], "set_type": "setType2"},
-                {"edges": ["g2", "g3"], "set_type": "setType1"},
-                {"edges": ["g4", "g3"], "set_type": "setType1"},
-                {"edges": ["g1", "g2"], "set_type": "setType1"},
-                {"edges": ["g4"], "set_type": "setType2"}
-            ],
+            [{'edges': ['a1'], 'set_type': 'N'}, {'edges': ['a1', 'a2', 'a4'], 'set_type': 'C'},
+             {'edges': ['a2', 'a3'], 'set_type': 'N'}, {'edges': ['a3'], 'set_type': 'C'},
+             {'edges': ['a4', 'a5'], 'set_type': 'N'}, {'edges': ['a5'], 'set_type': 'C'}],
 
+            [{'edges': ['b1'], 'set_type': 'N'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
+             {'edges': ['b2'], 'set_type': 'N'}, {'edges': ['b3', 'b4'], 'set_type': 'N'},
+             {'edges': ['b4', 'b5', 'b6'], 'set_type': 'C'}, {'edges': ['b5'], 'set_type': 'N'},
+             {'edges': ['b6'], 'set_type': 'N'}],
 
-            [  # Sets for fourth E-graph
-                {"edges": ["k1"], "set_type": "setType1"},
-                {"edges": ["k2", "k3"], "set_type": "setType1"},
-                {"edges": ["k4", "k3"], "set_type": "setType1"},
-                {"edges": ["k1", "k2"], "set_type": "setType2"},
-                {"edges": ["k4"], "set_type": "setType2"}
-            ]
+            [{'edges': ['c1'], 'set_type': 'N'}, {'edges': ['c1', 'c2'], 'set_type': 'C'},
+             {'edges': ['c2', 'c3'], 'set_type': 'C'}, {'edges': ['c3', 'c4'], 'set_type': 'C'},
+             {'edges': ['c4', 'c5'], 'set_type': 'N'}, {'edges': ['c5', 'c6', 'c7'], 'set_type': 'C'},
+             {'edges': ['c6'], 'set_type': 'N'}, {'edges': ['c7'], 'set_type': 'N'}],
+            #
+            [{'edges': ['d1'], 'set_type': 'O'}, {'edges': ['d1', 'd2', 'd7'], 'set_type': 'C'},
+             {'edges': ['d2', 'd3'], 'set_type': 'N'}, {'edges': ['d3', 'd4', 'd5'], 'set_type': 'C'},
+             {'edges': ['d4'], 'set_type': 'O'}, {'edges': ['d5', 'd6'], 'set_type': 'N'},
+             {'edges': ['d6', 'd7'], 'set_type': 'C'}],
+            #
+            [{'edges': ['e1'], 'set_type': 'O'}, {'edges': ['e1', 'e2', 'e8'], 'set_type': 'C'},
+             {'edges': ['e2', 'e3'], 'set_type': 'N'}, {'edges': ['e3', 'e4', 'e5'], 'set_type': 'C'},
+             {'edges': ['e4'], 'set_type': 'N'}, {'edges': ['e5', 'e6'], 'set_type': 'N'},
+             {'edges': ['e6', 'e7', 'e8'], 'set_type': 'C'}, {'edges': ['e7'], 'set_type': 'N'}]
+
         ]
 
         logger.info("No input file provided. Using default test data.")
 
     try:
-        alignment_edges, alignment_sets, set_matches, edge_types, set_types = align_multiple_e_graphs(edges_list, sets_list)
+        alignment_edges, alignment_sets, set_matches, edge_types, set_types = align_multiple_e_graphs(edges_list,
+                                                                                                      sets_list)
     except Exception as e:
         logger.error(f"Alignment failed: {e}")
         return
@@ -1426,9 +1487,9 @@ def main() -> None:
     for key, value in edge_types.items():
         logger.info(f"  {key}: {value}")
 
-    logger.info("Final Set types:")
-    for key, value in set_types.items():
-        logger.info(f"  {set(key)}: {value}")
+    logger.info(f"Final Set types:")
+    for key, value in set_types:
+         logger.info(f"{set(key)}: {value}")
 
 
 if __name__ == "__main__":
