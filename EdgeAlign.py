@@ -375,6 +375,7 @@ def update_alignment_sets(
             alignment_sets.append(new_set)
             alignment_sets.append(new_set)
             alignment_set_type_map.append((new_set, type_v1))
+            alignment_set_type_map.append((new_set, type_v1))
 
             return alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
 
