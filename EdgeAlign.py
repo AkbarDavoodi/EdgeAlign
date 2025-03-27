@@ -863,7 +863,8 @@ def find_best_alignment(
         nonlocal alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
 
         current_cost = sum(1 for edge in current_alignment if is_complete_edge(edge))
-        if current_cost > max_cost:
+        if (current_cost > max_cost or
+                (current_cost == max_cost and len(current_alignment) > len(best_alignment))):
             max_cost = current_cost
             best_alignment = list(current_alignment)
             best_alignment_sets = deepcopy(alignment_sets)
