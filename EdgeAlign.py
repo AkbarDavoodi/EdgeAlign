@@ -1415,53 +1415,55 @@ def main() -> None:
             logger.error(f"Failed to load input data: {e}")
             return
     else:
-
         edges_list = [
-            [{'id': 'a1', 'type': 'SINGLE'}, {'id': 'a2', 'type': 'DOUBLE'}, {'id': 'a3', 'type': 'SINGLE'},
-             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'SINGLE'}],
+            [{'id': 'd1', 'type': 'DOUBLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'SINGLE'},
+             {'id': 'd4', 'type': 'DOUBLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'DOUBLE'},
+             {'id': 'd7', 'type': 'SINGLE'}, {'id': 'd8', 'type': 'SINGLE'}],
 
-
-            [{'id': 'b1', 'type': 'SINGLE'}, {'id': 'b2', 'type': 'DOUBLE'}, {'id': 'b3', 'type': 'SINGLE'},
-             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'DOUBLE'}, {'id': 'b6', 'type': 'SINGLE'}],
+            [{'id': 'e1', 'type': 'DOUBLE'}, {'id': 'e2', 'type': 'SINGLE'}, {'id': 'e3', 'type': 'SINGLE'},
+             {'id': 'e4', 'type': 'DOUBLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'},
+             {'id': 'e7', 'type': 'SINGLE'}, {'id': 'e8', 'type': 'SINGLE'}, {'id': 'e9', 'type': 'SINGLE'}],
 
             [{'id': 'c1', 'type': 'SINGLE'}, {'id': 'c2', 'type': 'SINGLE'}, {'id': 'c3', 'type': 'SINGLE'},
              {'id': 'c4', 'type': 'SINGLE'}, {'id': 'c5', 'type': 'SINGLE'}, {'id': 'c6', 'type': 'DOUBLE'},
              {'id': 'c7', 'type': 'SINGLE'}],
-            #
-            [{'id': 'd1', 'type': 'DOUBLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'SINGLE'},
-             {'id': 'd4', 'type': 'DOUBLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'DOUBLE'},
-             {'id': 'd7', 'type': 'SINGLE'}],
-            #
-            [{'id': 'e1', 'type': 'DOUBLE'}, {'id': 'e2', 'type': 'SINGLE'}, {'id': 'e3', 'type': 'SINGLE'},
-             {'id': 'e4', 'type': 'DOUBLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'},
-             {'id': 'e7', 'type': 'SINGLE'}, {'id': 'e8', 'type': 'SINGLE'}]
 
+            [{'id': 'b1', 'type': 'SINGLE'}, {'id': 'b2', 'type': 'DOUBLE'}, {'id': 'b3', 'type': 'SINGLE'},
+             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'DOUBLE'}, {'id': 'b6', 'type': 'SINGLE'},
+             {'id': 'b7', 'type': 'SINGLE'}],
+
+            [{'id': 'a1', 'type': 'SINGLE'}, {'id': 'a2', 'type': 'DOUBLE'}, {'id': 'a3', 'type': 'SINGLE'},
+             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'SINGLE'}, {'id': 'a6', 'type': 'SINGLE'},
+             {'id': 'a7', 'type': 'SINGLE'}, {'id': 'a8', 'type': 'SINGLE'}],
         ]
-        sets_list = [
-            [{'edges': ['a1'], 'set_type': 'N'}, {'edges': ['a1', 'a2', 'a4'], 'set_type': 'C'},
-             {'edges': ['a2', 'a3'], 'set_type': 'N'}, {'edges': ['a3'], 'set_type': 'C'},
-             {'edges': ['a4', 'a5'], 'set_type': 'N'}, {'edges': ['a5'], 'set_type': 'C'}],
 
-            [{'edges': ['b1'], 'set_type': 'N'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
-             {'edges': ['b2'], 'set_type': 'N'}, {'edges': ['b3', 'b4'], 'set_type': 'N'},
-             {'edges': ['b4', 'b5', 'b6'], 'set_type': 'C'}, {'edges': ['b5'], 'set_type': 'N'},
-             {'edges': ['b6'], 'set_type': 'N'}],
+        sets_list = [
+            [{'edges': ['d1'], 'set_type': 'O'}, {'edges': ['d1', 'd2', 'd8'], 'set_type': 'C'},
+             {'edges': ['d2', 'd3'], 'set_type': 'N'}, {'edges': ['d3', 'd4', 'd5'], 'set_type': 'C'},
+             {'edges': ['d4'], 'set_type': 'N'}, {'edges': ['d5', 'd6'], 'set_type': 'N'},
+             {'edges': ['d6', 'd7', 'd8'], 'set_type': 'C'}, {'edges': ['d7'], 'set_type': 'O'}],
+
+            [{'edges': ['e1'], 'set_type': 'O'}, {'edges': ['e1', 'e2', 'e8'], 'set_type': 'C'},
+             {'edges': ['e2', 'e3'], 'set_type': 'N'}, {'edges': ['e3', 'e4', 'e5'], 'set_type': 'C'},
+             {'edges': ['e4'], 'set_type': 'N'}, {'edges': ['e5', 'e6'], 'set_type': 'N'},
+             {'edges': ['e6', 'e7', 'e8'], 'set_type': 'C'}, {'edges': ['e7', 'e9'], 'set_type': 'C'},
+             {'edges': ['e9'], 'set_type': 'N'}],
 
             [{'edges': ['c1'], 'set_type': 'N'}, {'edges': ['c1', 'c2'], 'set_type': 'C'},
              {'edges': ['c2', 'c3'], 'set_type': 'C'}, {'edges': ['c3', 'c4'], 'set_type': 'C'},
              {'edges': ['c4', 'c5'], 'set_type': 'N'}, {'edges': ['c5', 'c6', 'c7'], 'set_type': 'C'},
              {'edges': ['c6'], 'set_type': 'N'}, {'edges': ['c7'], 'set_type': 'N'}],
-            #
-            [{'edges': ['d1'], 'set_type': 'O'}, {'edges': ['d1', 'd2', 'd7'], 'set_type': 'C'},
-             {'edges': ['d2', 'd3'], 'set_type': 'N'}, {'edges': ['d3', 'd4', 'd5'], 'set_type': 'C'},
-             {'edges': ['d4'], 'set_type': 'O'}, {'edges': ['d5', 'd6'], 'set_type': 'N'},
-             {'edges': ['d6', 'd7'], 'set_type': 'C'}],
-            #
-            [{'edges': ['e1'], 'set_type': 'O'}, {'edges': ['e1', 'e2', 'e8'], 'set_type': 'C'},
-             {'edges': ['e2', 'e3'], 'set_type': 'N'}, {'edges': ['e3', 'e4', 'e5'], 'set_type': 'C'},
-             {'edges': ['e4'], 'set_type': 'N'}, {'edges': ['e5', 'e6'], 'set_type': 'N'},
-             {'edges': ['e6', 'e7', 'e8'], 'set_type': 'C'}, {'edges': ['e7'], 'set_type': 'N'}]
 
+            [{'edges': ['b1'], 'set_type': 'N'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
+             {'edges': ['b2'], 'set_type': 'N'}, {'edges': ['b3', 'b4'], 'set_type': 'N'},
+             {'edges': ['b4', 'b5', 'b6'], 'set_type': 'C'}, {'edges': ['b5'], 'set_type': 'N'},
+             {'edges': ['b6', 'b7'], 'set_type': 'C'}, {'edges': ['b7'], 'set_type': 'C'}],
+
+            [{'edges': ['a1'], 'set_type': 'N'}, {'edges': ['a1', 'a2', 'a4'], 'set_type': 'C'},
+             {'edges': ['a2', 'a3'], 'set_type': 'N'}, {'edges': ['a3'], 'set_type': 'C'},
+             {'edges': ['a4', 'a5'], 'set_type': 'N'}, {'edges': ['a5', 'a6'], 'set_type': 'C'},
+             {'edges': ['a6', 'a7'], 'set_type': 'C'}, {'edges': ['a7', 'a8'], 'set_type': 'C'},
+             {'edges': ['a8'], 'set_type': 'N'}]
         ]
 
         logger.info("No input file provided. Using default test data.")
