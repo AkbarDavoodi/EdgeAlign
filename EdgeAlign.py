@@ -1416,54 +1416,57 @@ def main() -> None:
             return
     else:
         edges_list = [
-            [{'id': 'd1', 'type': 'DOUBLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'SINGLE'},
-             {'id': 'd4', 'type': 'DOUBLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'DOUBLE'},
-             {'id': 'd7', 'type': 'SINGLE'}, {'id': 'd8', 'type': 'SINGLE'}],
+            [{'id': 'a1', 'type': 'DOUBLE'}, {'id': 'a2', 'type': 'SINGLE'}, {'id': 'a3', 'type': 'SINGLE'},
+             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'DOUBLE'}, {'id': 'a6', 'type': 'SINGLE'},
+             {'id': 'a7', 'type': 'SINGLE'}],
+            # O=C1CCC(=O)N1
 
-            [{'id': 'e1', 'type': 'DOUBLE'}, {'id': 'e2', 'type': 'SINGLE'}, {'id': 'e3', 'type': 'SINGLE'},
-             {'id': 'e4', 'type': 'DOUBLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'},
-             {'id': 'e7', 'type': 'SINGLE'}, {'id': 'e8', 'type': 'SINGLE'}, {'id': 'e9', 'type': 'SINGLE'}],
+            [{'id': 'b1', 'type': 'DOUBLE'}, {'id': 'b2', 'type': 'SINGLE'}, {'id': 'b3', 'type': 'SINGLE'},
+             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'SINGLE'}, {'id': 'b6', 'type': 'DOUBLE'},
+             {'id': 'b7', 'type': 'SINGLE'}, {'id': 'b8', 'type': 'SINGLE'}, {'id': 'b9', 'type': 'DOUBLE'},
+             {'id': 'b10', 'type': 'SINGLE'}],
+            # O=C1NC(=O)C(C(=O)O)N1
 
-            [{'id': 'c1', 'type': 'SINGLE'}, {'id': 'c2', 'type': 'SINGLE'}, {'id': 'c3', 'type': 'SINGLE'},
-             {'id': 'c4', 'type': 'SINGLE'}, {'id': 'c5', 'type': 'SINGLE'}, {'id': 'c6', 'type': 'DOUBLE'},
-             {'id': 'c7', 'type': 'SINGLE'}],
+            [{'id': 'c1', 'type': 'SINGLE'}, {'id': 'c2', 'type': 'DOUBLE'}, {'id': 'c3', 'type': 'SINGLE'},
+             {'id': 'c4', 'type': 'SINGLE'}, {'id': 'c5', 'type': 'SINGLE'}, {'id': 'c6', 'type': 'DOUBLE'}],
+            # CC(=O)NC(N)=O
 
-            [{'id': 'b1', 'type': 'SINGLE'}, {'id': 'b2', 'type': 'DOUBLE'}, {'id': 'b3', 'type': 'SINGLE'},
-             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'DOUBLE'}, {'id': 'b6', 'type': 'SINGLE'},
-             {'id': 'b7', 'type': 'SINGLE'}],
+            [{'id': 'd1', 'type': 'SINGLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'DOUBLE'},
+             {'id': 'd4', 'type': 'SINGLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'SINGLE'},
+             {'id': 'd7', 'type': 'DOUBLE'}],
+            # CCC(=O)NC(N)=O
 
-            [{'id': 'a1', 'type': 'SINGLE'}, {'id': 'a2', 'type': 'DOUBLE'}, {'id': 'a3', 'type': 'SINGLE'},
-             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'SINGLE'}, {'id': 'a6', 'type': 'SINGLE'},
-             {'id': 'a7', 'type': 'SINGLE'}, {'id': 'a8', 'type': 'SINGLE'}],
+            [{'id': 'e1', 'type': 'SINGLE'}, {'id': 'e2', 'type': 'DOUBLE'}, {'id': 'e3', 'type': 'SINGLE'},
+             {'id': 'e4', 'type': 'SINGLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'}]
+            # NC(=O)NC(N)=O
         ]
 
         sets_list = [
-            [{'edges': ['d1'], 'set_type': 'O'}, {'edges': ['d1', 'd2', 'd8'], 'set_type': 'C'},
-             {'edges': ['d2', 'd3'], 'set_type': 'N'}, {'edges': ['d3', 'd4', 'd5'], 'set_type': 'C'},
-             {'edges': ['d4'], 'set_type': 'N'}, {'edges': ['d5', 'd6'], 'set_type': 'N'},
-             {'edges': ['d6', 'd7', 'd8'], 'set_type': 'C'}, {'edges': ['d7'], 'set_type': 'O'}],
+            [{'edges': ['a1'], 'set_type': 'O'}, {'edges': ['a1', 'a2', 'a7'], 'set_type': 'C'},
+             {'edges': ['a2', 'a3'], 'set_type': 'C'}, {'edges': ['a3', 'a4'], 'set_type': 'C'},
+             {'edges': ['a4', 'a5', 'a6'], 'set_type': 'C'}, {'edges': ['a5'], 'set_type': 'O'},
+             {'edges': ['a6', 'a7'], 'set_type': 'N'}],
 
-            [{'edges': ['e1'], 'set_type': 'O'}, {'edges': ['e1', 'e2', 'e8'], 'set_type': 'C'},
-             {'edges': ['e2', 'e3'], 'set_type': 'N'}, {'edges': ['e3', 'e4', 'e5'], 'set_type': 'C'},
-             {'edges': ['e4'], 'set_type': 'N'}, {'edges': ['e5', 'e6'], 'set_type': 'N'},
-             {'edges': ['e6', 'e7', 'e8'], 'set_type': 'C'}, {'edges': ['e7', 'e9'], 'set_type': 'C'},
-             {'edges': ['e9'], 'set_type': 'N'}],
+            [{'edges': ['b1'], 'set_type': 'O'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
+             {'edges': ['b2'], 'set_type': 'O'}, {'edges': ['b3', 'b4', 'b10'], 'set_type': 'C'},
+             {'edges': ['b4', 'b5'], 'set_type': 'N'}, {'edges': ['b5', 'b6', 'b7'], 'set_type': 'C'},
+             {'edges': ['b6'], 'set_type': 'O'}, {'edges': ['b7', 'b8'], 'set_type': 'N'},
+             {'edges': ['b8', 'b9', 'b10'], 'set_type': 'C'}, {'edges': ['b9'], 'set_type': 'O'}],
 
-            [{'edges': ['c1'], 'set_type': 'N'}, {'edges': ['c1', 'c2'], 'set_type': 'C'},
-             {'edges': ['c2', 'c3'], 'set_type': 'C'}, {'edges': ['c3', 'c4'], 'set_type': 'C'},
-             {'edges': ['c4', 'c5'], 'set_type': 'N'}, {'edges': ['c5', 'c6', 'c7'], 'set_type': 'C'},
-             {'edges': ['c6'], 'set_type': 'N'}, {'edges': ['c7'], 'set_type': 'N'}],
+            [{'edges': ['c1'], 'set_type': 'C'}, {'edges': ['c1', 'c2', 'c3'], 'set_type': 'C'},
+             {'edges': ['c2'], 'set_type': 'O'}, {'edges': ['c3', 'c4'], 'set_type': 'N'},
+             {'edges': ['c4', 'c5', 'c6'], 'set_type': 'C'}, {'edges': ['c5'], 'set_type': 'N'},
+             {'edges': ['c6'], 'set_type': 'O'}],
 
-            [{'edges': ['b1'], 'set_type': 'N'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
-             {'edges': ['b2'], 'set_type': 'N'}, {'edges': ['b3', 'b4'], 'set_type': 'N'},
-             {'edges': ['b4', 'b5', 'b6'], 'set_type': 'C'}, {'edges': ['b5'], 'set_type': 'N'},
-             {'edges': ['b6', 'b7'], 'set_type': 'C'}, {'edges': ['b7'], 'set_type': 'C'}],
+            [{'edges': ['d1'], 'set_type': 'C'}, {'edges': ['d1', 'd2'], 'set_type': 'C'},
+             {'edges': ['d2', 'd3', 'd4'], 'set_type': 'C'}, {'edges': ['d3'], 'set_type': 'O'},
+             {'edges': ['d4', 'd5'], 'set_type': 'N'}, {'edges': ['d5', 'd6', 'd7'], 'set_type': 'C'},
+             {'edges': ['d6'], 'set_type': 'N'}, {'edges': ['d7'], 'set_type': 'O'}],
 
-            [{'edges': ['a1'], 'set_type': 'N'}, {'edges': ['a1', 'a2', 'a4'], 'set_type': 'C'},
-             {'edges': ['a2', 'a3'], 'set_type': 'N'}, {'edges': ['a3'], 'set_type': 'C'},
-             {'edges': ['a4', 'a5'], 'set_type': 'N'}, {'edges': ['a5', 'a6'], 'set_type': 'C'},
-             {'edges': ['a6', 'a7'], 'set_type': 'C'}, {'edges': ['a7', 'a8'], 'set_type': 'C'},
-             {'edges': ['a8'], 'set_type': 'N'}]
+            [{'edges': ['e1'], 'set_type': 'N'}, {'edges': ['e1', 'e2', 'e3'], 'set_type': 'C'},
+             {'edges': ['e2'], 'set_type': 'O'}, {'edges': ['e3', 'e4'], 'set_type': 'N'},
+             {'edges': ['e4', 'e5', 'e6'], 'set_type': 'C'}, {'edges': ['e5'], 'set_type': 'N'},
+             {'edges': ['e6'], 'set_type': 'O'}]
         ]
 
         logger.info("No input file provided. Using default test data.")
