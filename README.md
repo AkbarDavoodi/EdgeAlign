@@ -78,51 +78,63 @@ EdgeAlign expects the input to be provided as a JSON file with two keys: `edges_
 ```json
 {
   "edges_list": [
-            [{'id': 'a1', 'type': 'DOUBLE'}, {'id': 'a2', 'type': 'SINGLE'}, {'id': 'a3', 'type': 'SINGLE'},
-             {'id': 'a4', 'type': 'SINGLE'}, {'id': 'a5', 'type': 'DOUBLE'}, {'id': 'a6', 'type': 'SINGLE'},
-             {'id': 'a7', 'type': 'SINGLE'}],
-
-            [{'id': 'b1', 'type': 'DOUBLE'}, {'id': 'b2', 'type': 'SINGLE'}, {'id': 'b3', 'type': 'SINGLE'},
-             {'id': 'b4', 'type': 'SINGLE'}, {'id': 'b5', 'type': 'SINGLE'}, {'id': 'b6', 'type': 'DOUBLE'},
-             {'id': 'b7', 'type': 'SINGLE'}, {'id': 'b8', 'type': 'SINGLE'}, {'id': 'b9', 'type': 'DOUBLE'},
-             {'id': 'b10', 'type': 'SINGLE'}],
-
-            [{'id': 'c1', 'type': 'SINGLE'}, {'id': 'c2', 'type': 'DOUBLE'}, {'id': 'c3', 'type': 'SINGLE'},
-             {'id': 'c4', 'type': 'SINGLE'}, {'id': 'c5', 'type': 'SINGLE'}, {'id': 'c6', 'type': 'DOUBLE'}],
-
-            [{'id': 'd1', 'type': 'SINGLE'}, {'id': 'd2', 'type': 'SINGLE'}, {'id': 'd3', 'type': 'DOUBLE'},
-             {'id': 'd4', 'type': 'SINGLE'}, {'id': 'd5', 'type': 'SINGLE'}, {'id': 'd6', 'type': 'SINGLE'},
-             {'id': 'd7', 'type': 'DOUBLE'}],
-
-            [{'id': 'e1', 'type': 'SINGLE'}, {'id': 'e2', 'type': 'DOUBLE'}, {'id': 'e3', 'type': 'SINGLE'},
-             {'id': 'e4', 'type': 'SINGLE'}, {'id': 'e5', 'type': 'SINGLE'}, {'id': 'e6', 'type': 'DOUBLE'}]
+    [
+      {"id": "a1", "type": "DOUBLE"}, {"id": "a2", "type": "SINGLE"}, {"id": "a3", "type": "SINGLE"},
+      {"id": "a4", "type": "SINGLE"}, {"id": "a5", "type": "DOUBLE"}, {"id": "a6", "type": "SINGLE"},
+      {"id": "a7", "type": "SINGLE"}
+    ],
+    [
+      {"id": "b1", "type": "DOUBLE"}, {"id": "b2", "type": "SINGLE"}, {"id": "b3", "type": "SINGLE"},
+      {"id": "b4", "type": "SINGLE"}, {"id": "b5", "type": "SINGLE"}, {"id": "b6", "type": "DOUBLE"},
+      {"id": "b7", "type": "SINGLE"}, {"id": "b8", "type": "SINGLE"}, {"id": "b9", "type": "DOUBLE"},
+      {"id": "b10", "type": "SINGLE"}
+    ],
+    [
+      {"id": "c1", "type": "SINGLE"}, {"id": "c2", "type": "DOUBLE"}, {"id": "c3", "type": "SINGLE"},
+      {"id": "c4", "type": "SINGLE"}, {"id": "c5", "type": "SINGLE"}, {"id": "c6", "type": "DOUBLE"}
+    ],
+    [
+      {"id": "d1", "type": "SINGLE"}, {"id": "d2", "type": "SINGLE"}, {"id": "d3", "type": "DOUBLE"},
+      {"id": "d4", "type": "SINGLE"}, {"id": "d5", "type": "SINGLE"}, {"id": "d6", "type": "SINGLE"},
+      {"id": "d7", "type": "DOUBLE"}
+    ],
+    [
+      {"id": "e1", "type": "SINGLE"}, {"id": "e2", "type": "DOUBLE"}, {"id": "e3", "type": "SINGLE"},
+      {"id": "e4", "type": "SINGLE"}, {"id": "e5", "type": "SINGLE"}, {"id": "e6", "type": "DOUBLE"}
+    ]
   ],
   "sets_list": [
-           [{'edges': ['a1'], 'set_type': 'O'}, {'edges': ['a1', 'a2', 'a7'], 'set_type': 'C'},
-             {'edges': ['a2', 'a3'], 'set_type': 'C'}, {'edges': ['a3', 'a4'], 'set_type': 'C'},
-             {'edges': ['a4', 'a5', 'a6'], 'set_type': 'C'}, {'edges': ['a5'], 'set_type': 'O'},
-             {'edges': ['a6', 'a7'], 'set_type': 'N'}],
-
-            [{'edges': ['b1'], 'set_type': 'O'}, {'edges': ['b1', 'b2', 'b3'], 'set_type': 'C'},
-             {'edges': ['b2'], 'set_type': 'O'}, {'edges': ['b3', 'b4', 'b10'], 'set_type': 'C'},
-             {'edges': ['b4', 'b5'], 'set_type': 'N'}, {'edges': ['b5', 'b6', 'b7'], 'set_type': 'C'},
-             {'edges': ['b6'], 'set_type': 'O'}, {'edges': ['b7', 'b8'], 'set_type': 'N'},
-             {'edges': ['b8', 'b9', 'b10'], 'set_type': 'C'}, {'edges': ['b9'], 'set_type': 'O'}],
-
-            [{'edges': ['c1'], 'set_type': 'C'}, {'edges': ['c1', 'c2', 'c3'], 'set_type': 'C'},
-             {'edges': ['c2'], 'set_type': 'O'}, {'edges': ['c3', 'c4'], 'set_type': 'N'},
-             {'edges': ['c4', 'c5', 'c6'], 'set_type': 'C'}, {'edges': ['c5'], 'set_type': 'N'},
-             {'edges': ['c6'], 'set_type': 'O'}],
-
-            [{'edges': ['d1'], 'set_type': 'C'}, {'edges': ['d1', 'd2'], 'set_type': 'C'},
-             {'edges': ['d2', 'd3', 'd4'], 'set_type': 'C'}, {'edges': ['d3'], 'set_type': 'O'},
-             {'edges': ['d4', 'd5'], 'set_type': 'N'}, {'edges': ['d5', 'd6', 'd7'], 'set_type': 'C'},
-             {'edges': ['d6'], 'set_type': 'N'}, {'edges': ['d7'], 'set_type': 'O'}],
-
-            [{'edges': ['e1'], 'set_type': 'N'}, {'edges': ['e1', 'e2', 'e3'], 'set_type': 'C'},
-             {'edges': ['e2'], 'set_type': 'O'}, {'edges': ['e3', 'e4'], 'set_type': 'N'},
-             {'edges': ['e4', 'e5', 'e6'], 'set_type': 'C'}, {'edges': ['e5'], 'set_type': 'N'},
-             {'edges': ['e6'], 'set_type': 'O'}]
+    [
+      {"edges": ["a1"], "set_type": "O"}, {"edges": ["a1", "a2", "a7"], "set_type": "C"},
+      {"edges": ["a2", "a3"], "set_type": "C"}, {"edges": ["a3", "a4"], "set_type": "C"},
+      {"edges": ["a4", "a5", "a6"], "set_type": "C"}, {"edges": ["a5"], "set_type": "O"},
+      {"edges": ["a6", "a7"], "set_type": "N"}
+    ],
+    [
+      {"edges": ["b1"], "set_type": "O"}, {"edges": ["b1", "b2", "b3"], "set_type": "C"},
+      {"edges": ["b2"], "set_type": "O"}, {"edges": ["b3", "b4", "b10"], "set_type": "C"},
+      {"edges": ["b4", "b5"], "set_type": "N"}, {"edges": ["b5", "b6", "b7"], "set_type": "C"},
+      {"edges": ["b6"], "set_type": "O"}, {"edges": ["b7", "b8"], "set_type": "N"},
+      {"edges": ["b8", "b9", "b10"], "set_type": "C"}, {"edges": ["b9"], "set_type": "O"}
+    ],
+    [
+      {"edges": ["c1"], "set_type": "C"}, {"edges": ["c1", "c2", "c3"], "set_type": "C"},
+      {"edges": ["c2"], "set_type": "O"}, {"edges": ["c3", "c4"], "set_type": "N"},
+      {"edges": ["c4", "c5", "c6"], "set_type": "C"}, {"edges": ["c5"], "set_type": "N"},
+      {"edges": ["c6"], "set_type": "O"}
+    ],
+    [
+      {"edges": ["d1"], "set_type": "C"}, {"edges": ["d1", "d2"], "set_type": "C"},
+      {"edges": ["d2", "d3", "d4"], "set_type": "C"}, {"edges": ["d3"], "set_type": "O"},
+      {"edges": ["d4", "d5"], "set_type": "N"}, {"edges": ["d5", "d6", "d7"], "set_type": "C"},
+      {"edges": ["d6"], "set_type": "N"}, {"edges": ["d7"], "set_type": "O"}
+    ],
+    [
+      {"edges": ["e1"], "set_type": "N"}, {"edges": ["e1", "e2", "e3"], "set_type": "C"},
+      {"edges": ["e2"], "set_type": "O"}, {"edges": ["e3", "e4"], "set_type": "N"},
+      {"edges": ["e4", "e5", "e6"], "set_type": "C"}, {"edges": ["e5"], "set_type": "N"},
+      {"edges": ["e6"], "set_type": "O"}
+    ]
   ]
 }
 ```
