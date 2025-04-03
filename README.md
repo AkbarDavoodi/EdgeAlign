@@ -148,6 +148,34 @@ EdgeAlign expects the input to be provided as a JSON file with two keys: `edges_
   Duplicate edge labels are allowed and the tool will still run correctly, but using unique labels is advised to avoid ambiguous or less interpretable results.
 
 
+**Converting SMILES Strings to Input Format:**
+If you're working with chemical structures, you can generate valid input JSON for `EdgeAlign` using the provided script: `smilesToInput.py`.
+This script takes one or more SMILES strings and outputs a properly formatted JSON file with the required `edges_list` and `sets_list`.
+
+```bash
+python smilesToInput.py "O=C1CCC(=O)N1" "O=C1NC(=O)C(C(=O)O)N1" > input.json
+```
+
+Each SMILES string is treated as a separate molecule.
+The resulting JSON can be used directly as input to `EdgeAlign`.
+
+To generate and view a labeled image of the molecules:
+python smilesToInput.py "O=C1CCC(=O)N1" "O=C1NC(=O)C(C(=O)O)N1" --win > input.json
+
+This will:
+- Save a PNG file `all_labeled_molecules.png` showing each molecule with labeled bond IDs.
+- Open the image in a pop-up window (if a graphical interface is available).
+
+📤 Output
+`stdout`: JSON structure compatible with EdgeAlign
+`all_labeled_molecules.png`: Visual representation of molecules with bond labels
+No extra terminal output unless `--win` is used
+
+💡 Notes
+- Invalid SMILES strings are silently ignored.
+- Edge labels are prefixed (e.g., `a1`, `b2`, ...) for uniqueness and clarity.
+- This script is especially useful for cheminformatics workflows.
+
 
 ## How to Cite
 
