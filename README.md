@@ -167,6 +167,7 @@ This will:
 - Open the image in a pop-up window (if a graphical interface is available).
 
 📤 Output
+
 `stdout`: JSON structure compatible with EdgeAlign
 `all_labeled_molecules.png`: Visual representation of molecules with bond labels
 No extra terminal output unless `--win` is used
