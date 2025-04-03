@@ -149,6 +149,7 @@ EdgeAlign expects the input to be provided as a JSON file with two keys: `edges_
 
 
 **Converting SMILES Strings to Input Format:**
+
 If you're working with chemical structures, you can generate valid input JSON for `EdgeAlign` using the provided script: `smilesToInput.py`.
 This script takes one or more SMILES strings and outputs a properly formatted JSON file with the required `edges_list` and `sets_list`.
 
