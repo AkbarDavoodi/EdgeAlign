@@ -191,7 +191,7 @@ You can also use the following BibTeX entry:
 @article{EdgeAlign25,
   title={Edge‑wise Graph Alignments},
   author={Davoodi, Akbar and Flamm, Christoph and Merkle, Daniel and Stadler, Peter F},
-  journal={Submitted to INFORMS Journal on Computing},
+  journal={Submitted},
   year={2025}
 }
 ```
