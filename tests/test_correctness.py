@@ -90,17 +90,14 @@ class CorrectnessTests(unittest.TestCase):
     def test_unexpected_error_is_not_pruned(self):
         inputs = [graph(i, "CC", [(0, 1, "SINGLE")]) for i in range(2)]
         edges, vertices = map(list, zip(*inputs))
-        with patch.object(ea, "update_alignment_sets", side_effect=RuntimeError("injected defect")):
+        with patch.object(ea, "is_complete_edge", side_effect=RuntimeError("injected defect")):
             with self.assertRaisesRegex(RuntimeError, "injected defect"):
                 ea.align_multiple_e_graphs(edges, vertices)
 
-    def test_expected_conflict_still_prunes_a_candidate(self):
-        inputs = [graph(i, "CC", [(0, 1, "SINGLE")]) for i in range(2)]
-        edges, vertices = map(list, zip(*inputs))
-        with patch.object(ea, "update_alignment_sets", side_effect=ea.AlignmentConflict("test conflict")):
-            columns, _, _, _, _ = ea.align_multiple_e_graphs(edges, vertices)
-        self.assertEqual(len(columns), 2)
-        self.assertTrue(all(None in flatten(column) for column in columns))
+    def test_forbidden_overlap_rejects_the_state(self):
+        self.align_and_check([
+            graph(0, "CCC", [(0, 1, "SINGLE"), (1, 2, "SINGLE"), (0, 2, "DOUBLE")]),
+            graph(1, "CCC", [(0, 1, "SINGLE"), (1, 2, "SINGLE"), (0, 2, "SINGLE")])], 1)
 
 
 if __name__ == "__main__":

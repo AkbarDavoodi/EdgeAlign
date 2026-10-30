@@ -773,222 +773,118 @@ def find_best_alignment(
     Dict[str, str],  # alignment_edge_type_map
     List[Tuple[FrozenSet[Any], str]]  # alignment_set_type_map
 ]:
-    best_alignment: List[CompositeEdge] = []
-    best_alignment_sets: List[FrozenSet[CompositeEdge]] = []
-    best_set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue] = {}
-    best_alignment_edge_type_map: Dict[str, str] = {}
-    best_alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = []
-    max_cost = 0
+    """Algorithm 6: exact endpoint-map search on fixed representatives.
 
-    alignment_sets: List[FrozenSet[CompositeEdge]] = []
-    set_matches: Dict[Tuple[FrozenSet[CompositeEdge], str], SetMatchValue] = {}
-    alignment_edge_type_map: Dict[str, str] = {}
-    alignment_set_type_map: List[Tuple[FrozenSet[Any], str]] = []
+    The score is (complete columns, matched points), in lexicographic order.
+    Endpoint indices distinguish the two equal singleton stars of a K2.
+    """
+    def endpoints(points, stars, type_records):
+        types = defaultdict(deque)
+        for star, label in type_records:
+            types[frozenset(star)].append(label)
+        labels, ends = [], {e: [] for e in points}
+        for vertex, star in enumerate(stars):
+            available = types[frozenset(star)]
+            labels.append(available.popleft() if available else None)
+            for e in star:
+                ends[e].append(vertex)
+        if any(len(uv) != 2 for uv in ends.values()):
+            raise ValueError("Every point must have two endpoint occurrences")
+        ends = {e: tuple(uv) for e, uv in ends.items()}
+        at_pair = {frozenset(uv): e for e, uv in ends.items()}
+        if len(at_pair) != len(points):
+            raise ValueError("Parallel edges are outside the simple E-graph model")
+        return labels, ends, at_pair
 
-    def is_feasible_extension(e1: CompositeEdge, e2: CompositeEdge, current_alignment: List[CompositeEdge],
-                              sets_1: List[Set[Any]], sets_2: List[Set[Any]]) -> bool:
-        # Check that the edge types match.
-        if edge_type_map_1.get(str(e1)) != edge_type_map_2.get(str(e2)):
-            logger.debug(
-                f"Edge type mismatch: {e1} is {edge_type_map_1.get(str(e1))} vs {e2} is {edge_type_map_2.get(str(e2))}")
-            return False
+    labels_1, ends_1, _ = endpoints(edges_1, sets_1, set_type_map_1)
+    labels_2, ends_2, at_pair_2 = endpoints(edges_2, sets_2, set_type_map_2)
+    types_1 = {e: edge_type_map_1.get(str(e), edge_type_map_1.get(e)) for e in edges_1}
+    types_2 = {e: edge_type_map_2.get(str(e), edge_type_map_2.get(e)) for e in edges_2}
+    complete_1 = {e: is_complete_edge(e) for e in edges_1}
+    complete_2 = {e: is_complete_edge(e) for e in edges_2}
+    candidates = [(e, f) for e in edges_1 for f in edges_2 if types_1[e] == types_2[f]]
+    visited, best_map, best_matches, best_score = set(), {}, [], (-1, -1)
 
-        if e1 is None or e2 is None:
-            return False
+    def close(mapping):
+        """Include every overlap; reject any overlap with forbidden labels."""
+        matches = []
+        for e, (u, v) in ends_1.items():
+            if u in mapping and v in mapping:
+                f = at_pair_2.get(frozenset((mapping[u], mapping[v])))
+                if f is not None:
+                    if types_1[e] != types_2[f]:
+                        return None
+                    matches.append((e, f))
+        return matches
 
-        # Check compatibility
-        incident_sets_1 = [s for s in sets_1 if e1 in s]
-        incident_sets_2 = [s for s in sets_2 if e2 in s]
+    def visit(mapping):
+        nonlocal best_map, best_matches, best_score
+        matches = close(mapping)
+        state = frozenset(mapping.items())
+        if matches is None or state in visited:
+            return
+        visited.add(state)
+        score = (sum(complete_1[e] and complete_2[f] for e, f in matches), len(matches))
+        if score > best_score:
+            best_map, best_matches, best_score = mapping.copy(), matches, score
 
-        if len(incident_sets_1) != 2 or len(incident_sets_2) != 2:
-            logger.error("Error: Each edge must appear in exactly 2 sets (E-graph requirement)")
-            return False
+        used_1, used_2 = {e for e, _ in matches}, {f for _, f in matches}
+        unused_1, unused_2 = set(edges_1) - used_1, set(edges_2) - used_2
+        bound = (score[0] + min(sum(complete_1[e] for e in unused_1),
+                                sum(complete_2[f] for f in unused_2)),
+                 score[1] + min(len(unused_1), len(unused_2)))
+        if bound <= best_score:
+            return
+        for e, f in candidates:
+            if e in used_1 or f in used_2:
+                continue
+            for target in (ends_2[f], ends_2[f][::-1]):
+                extension = dict(zip(ends_1[e], target))
+                if any(u in mapping and mapping[u] != v for u, v in extension.items()):
+                    continue
+                trial = {**mapping, **extension}
+                if len(set(trial.values())) != len(trial):
+                    continue
+                if any(labels_1[u] != labels_2[v] for u, v in extension.items()):
+                    continue
+                visit(trial)
 
-        types1 = frozenset(
-            t
-            for s in incident_sets_1
-            for t in lookup_all_set_types(set_type_map_1, frozenset(s))
-        )
-        types2 = frozenset(
-            t
-            for s in incident_sets_2
-            for t in lookup_all_set_types(set_type_map_2, frozenset(s))
-        )
+    visit({})
 
-        logger.debug(f"set_type_map_1={set_type_map_1}")
-        logger.debug(f"incident_sets_1={incident_sets_1}")
-        logger.debug(f"incident_sets_2={incident_sets_2}")
+    # Glue the saved optimum and retain every unmatched point as a gap column.
+    columns = list(best_matches)
+    left = {e: (e, f) for e, f in best_matches}
+    right = {f: (e, f) for e, f in best_matches}
+    for e in edges_1:
+        if e not in left:
+            left[e] = (e, None)
+            columns.append(left[e])
+    for f in edges_2:
+        if f not in right:
+            right[f] = (pad_none(current_depth - 1), f)
+            columns.append(right[f])
+    edge_labels = {str(column): types_1[e] for e, column in left.items()}
+    edge_labels.update({str(column): types_2[f] for f, column in right.items()})
+    stars, vertex_labels, set_matches = [], [], {}
 
-        logger.debug(f"types1={types1}")
-        logger.debug(f"types2={types2}")
-        if types1 != types2:
-            logger.debug(f"Endpoint set type mismatch for edges {e1} and {e2}: {types1} vs {types2}")
-            return False
+    def add_vertex(star, label, source_1, source_2):
+        # Unique endpoint keys preserve equal singleton stars with equal labels.
+        set_matches[(star, str(len(stars)))] = (source_1, source_2)
+        stars.append(star)
+        vertex_labels.append((star, label))
 
-        x, y = incident_sets_1
-        a, b = incident_sets_2
-
-        union_neighbors_e1 = set(x).union(set(y)) - {e1}
-        union_neighbors_e2 = set(a).union(set(b)) - {e2}
-
-        aligned_neighbors_e1 = {
-            (aligned_e1, aligned_e2) for aligned_e1, aligned_e2 in current_alignment if aligned_e1 in union_neighbors_e1
-        }
-        aligned_neighbors_e2 = {
-            (aligned_e1, aligned_e2) for aligned_e1, aligned_e2 in current_alignment if aligned_e2 in union_neighbors_e2
-        }
-        logger.debug(f"aligned_neighbors_e1: {aligned_neighbors_e1}")
-        logger.debug(f"aligned_neighbors_e2: {aligned_neighbors_e2}")
-        if aligned_neighbors_e1 != aligned_neighbors_e2:
-            logger.debug(f"Neighbor mismatch: {aligned_neighbors_e1} vs {aligned_neighbors_e2}")
-            return False
-
-        x_y_in_set_matches = any(s == x for _, (s, t) in set_matches.items()) and \
-                             any(s == y for _, (s, t) in set_matches.items())
-        if x_y_in_set_matches:
-            logger.debug("Edge already implied by existing set_matches for first graph.")
-        a_b_in_set_matches = any(t == a for _, (s, t) in set_matches.items()) and \
-                             any(t == b for _, (s, t) in set_matches.items())
-        if a_b_in_set_matches:
-            logger.debug("Edge already implied by existing set_matches for second graph.")
-
-        if x_y_in_set_matches or a_b_in_set_matches:
-            return False
-
-        return True
-
-    def backtrack_vf2(current_alignment: List[CompositeEdge],
-                      frontier_edges_1: Set[CompositeEdge],
-                      frontier_edges_2: Set[CompositeEdge],
-                      matched_edges_1: Set[CompositeEdge],
-                      matched_edges_2: Set[CompositeEdge]) -> None:
-        nonlocal best_alignment, max_cost, best_set_matches, best_alignment_sets, best_alignment_edge_type_map, best_alignment_set_type_map
-        nonlocal alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map
-
-        current_cost = sum(1 for edge in current_alignment if is_complete_edge(edge))
-        if (current_cost > max_cost or
-                (current_cost == max_cost and len(current_alignment) > len(best_alignment))):
-            max_cost = current_cost
-            best_alignment = list(current_alignment)
-            best_alignment_sets = deepcopy(alignment_sets)
-            best_set_matches = deepcopy(set_matches)
-            best_alignment_edge_type_map = deepcopy(alignment_edge_type_map)
-            best_alignment_set_type_map = deepcopy(alignment_set_type_map)
-
-        for e1 in list(frontier_edges_1):
-            for e2 in list(frontier_edges_2):
-                logger.debug(f"EXPLORING candidate edge pair ({e1}, {e2})")
-                if is_feasible_extension(e1, e2, current_alignment, sets_1, sets_2):
-                    # Save current state before trying this candidate.
-                    previous_current_alignment = deepcopy(current_alignment)
-                    previous_alignment_sets = deepcopy(alignment_sets)
-                    previous_set_matches = deepcopy(set_matches)
-                    previous_edge_type_map = deepcopy(alignment_edge_type_map)
-                    previous_set_type_map = deepcopy(alignment_set_type_map)
-
-                    try:
-                        logger.debug(f"Adding edge pair ({e1}, {e2}) to alignment...")
-                        current_alignment.append((e1, e2))
-                        alignment_edge_type_map[str((e1, e2))] = edge_type_map_1.get(str(e1))
-                        # Update alignment sets and set matches.
-                        alignment_sets, set_matches, alignment_edge_type_map, alignment_set_type_map = update_alignment_sets(
-                            e1, e2, alignment_sets, set_matches, sets_1, sets_2,
-                            current_alignment, edge_type_map_1, edge_type_map_2,
-                            set_type_map_1, set_type_map_2, alignment_edge_type_map, alignment_set_type_map
-                        )
-                        # Check for implied edges. This is where the forbidden condition might be triggered.
-                        set_matches, current_alignment, alignment_sets, alignment_edge_type_map, alignment_set_type_map = check_implied_edge_matches(
-                            set_matches, current_alignment, alignment_sets,
-                            edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2,
-                            alignment_edge_type_map, alignment_set_type_map
-                        )
-                    except AlignmentConflict as ex:
-                        logger.debug(
-                            f"Forbidden implied edge encountered when adding ({e1}, {e2}): {ex}. Rolling back and pruning this branch.")
-                        # Restore previous state and skip further exploration of this branch.
-                        current_alignment = previous_current_alignment
-                        alignment_sets = previous_alignment_sets
-                        set_matches = previous_set_matches
-                        alignment_edge_type_map = previous_edge_type_map
-                        alignment_set_type_map = previous_set_type_map
-                        continue
-
-                    # alignment_set_type_map = {k: v for k, v in alignment_set_type_map.items() if k in alignment_sets}
-                    logger.debug(f"Updated after adding ({e1}, {e2}):")
-                    logger.debug(f"  Alignment Sets: {alignment_sets}")
-                    logger.debug(f"  Set Matches: {set_matches}")
-                    logger.debug(f"  Alignment Edge Types: {alignment_edge_type_map}")
-                    logger.debug(f"  Alignment Set Types: {alignment_set_type_map}")
-                    logger.debug(f"  Alignment edges: {current_alignment}")
-
-                    matched_edges_1.add(e1)
-                    matched_edges_2.add(e2)
-                    frontier_edges_1.remove(e1)
-                    frontier_edges_2.remove(e2)
-
-                    new_frontier_edges_1 = {
-                                               e for s in sets_1 if any(prev in s for prev in matched_edges_1) for e in
-                                               s
-                                           } - matched_edges_1
-                    new_frontier_edges_2 = {
-                                               e for s in sets_2 if any(prev in s for prev in matched_edges_2) for e in
-                                               s
-                                           } - matched_edges_2
-
-                    backtrack_vf2(
-                        current_alignment,
-                        frontier_edges_1 | new_frontier_edges_1,
-                        frontier_edges_2 | new_frontier_edges_2,
-                        matched_edges_1,
-                        matched_edges_2,
-                    )
-
-                    logger.debug(f"Removing edge pair ({e1}, {e2}) from alignment, restoring state...")
-                    # Restore state after backtracking from this candidate.
-                    alignment_sets = previous_alignment_sets
-                    set_matches = previous_set_matches
-                    current_alignment = previous_current_alignment
-                    alignment_edge_type_map = previous_edge_type_map
-                    alignment_set_type_map = previous_set_type_map
-
-                    matched_edges_1.remove(e1)
-                    matched_edges_2.remove(e2)
-                    frontier_edges_1.add(e1)
-                    frontier_edges_2.add(e2)
-        logger.debug(f"BEST alignment so far: {best_alignment}")
-        logger.debug(f"best_alignment_edge_type_map: {best_alignment_edge_type_map}")
-
-    frontier_edges_1 = set(edges_1)
-    frontier_edges_2 = set(edges_2)
-    logger.debug(f"Starting backtracking with initial frontier_edges_1: {frontier_edges_1}")
-    backtrack_vf2([], frontier_edges_1, frontier_edges_2, set(), set())
-    logger.debug(f"BEST alignment after backtracking: {best_alignment}")
-    logger.debug(f"BEST set_matches after backtracking: {best_set_matches}")
-    logger.debug(f"BEST alignment_edge_type_map: {best_alignment_edge_type_map}")
-    logger.debug(f"BEST alignment_set_type_map: {best_alignment_set_type_map}")
-
-    best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map = handling_set_matches_isolated_edges(
-        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map,
-        best_alignment_set_type_map,
-        sets_1, sets_2,
-        edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2
-    )
-
-    best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map = refine_alignment_with_unaligned_edges(
-        best_alignment, best_alignment_sets, best_set_matches, best_alignment_edge_type_map,
-        best_alignment_set_type_map, sets_1, sets_2,
-        set(edges_1), set(edges_2), current_depth,
-        edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2
-    )
-
-    logger.debug(f"Best alignment after refinement: {best_alignment}")
-    logger.debug(f"Alignment Sets: {best_alignment_sets}")
-    logger.info(f"Cost: {max_cost}")
-    logger.debug(f"Set Matches: {best_set_matches}")
-    logger.debug(f"Alignment Edge Types: {best_alignment_edge_type_map}")
-    logger.debug(f"Alignment Set Types: {best_alignment_set_type_map}")
-
-    return best_alignment, best_alignment_sets, max_cost, best_set_matches, best_alignment_edge_type_map, best_alignment_set_type_map
+    for u, source in enumerate(sets_1):
+        star = {left[e] for e in source}
+        other = sets_2[best_map[u]] if u in best_map else None
+        if other is not None:
+            star.update(right[f] for f in other)
+        add_vertex(frozenset(star), labels_1[u], frozenset(source),
+                   frozenset(other) if other is not None else 'nothing')
+    for v, source in enumerate(sets_2):
+        if v not in best_map.values():
+            add_vertex(frozenset(right[f] for f in source), labels_2[v],
+                       'nothing', frozenset(source))
+    return columns, stars, best_score[0], set_matches, edge_labels, vertex_labels
 
 
 def refine_alignment_with_unaligned_edges(
