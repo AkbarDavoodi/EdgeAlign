@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 
 CompositeEdge = Union[Any, Tuple[Any, ...]]
 
+class AlignmentConflict(Exception):
+    """An expected incompatibility in a candidate alignment."""
+
 # ----------------- Logging Configuration -----------------
 def configure_logging(log_level: str, log_file: Optional[str] = None) -> None:
     numeric_level = getattr(logging, log_level.upper(), None)
@@ -142,7 +145,7 @@ def check_implied_edge_matches(
                             if type1 is not None and type2 is not None and type1 != type2:
                                 logger.debug(
                                     f"Forbidden implied edge: candidate pair ({candidate_e1}, {candidate_e2}) has mismatched types ({type1} vs {type2}). Pruning branch.")
-                                raise Exception("Forbidden implied edge encountered: alignment branch pruned.")
+                                raise AlignmentConflict("Forbidden implied edge encountered: alignment branch pruned.")
                             # If types match, record the candidate pair.
                             if type1 is not None and type1 == type2:
                                 e1 = candidate_e1
@@ -361,12 +364,12 @@ def update_alignment_sets(
                                         f"Backward set_matches for the isolated edge will result in ({candidate_e1}, {candidate_e2}) with mismatched types ({type1} vs {type2}) which is a forbidden implied edge.")
             del set_matches[(new_set1, labela)]
             del set_matches[(new_set2, labelb)]
-            alignment_set_type_map = [pair for pair in alignment_set_type_map if pair[0] != new_set_1]
+            alignment_set_type_map = [pair for pair in alignment_set_type_map if pair[0] != new_set1]
 
             if forward and backward:
                 logger.debug(
                     f"Any set_matches for the isolated edge ({e1}, {e2}) will result in a forbidden implied edege: alignment branch pruned.")
-                raise Exception("Forbidden implied edge encountered: alignment branch pruned.")
+                raise AlignmentConflict("Forbidden implied edge encountered: alignment branch pruned.")
 
             logger.debug(
                 f"Isolated edge {e1}/{e2}: Candidate sets do not differ in type. Deferring decision for Set_matches.")
@@ -435,7 +438,7 @@ def update_alignment_sets(
             f"Candidate sets have mismatched types: {type_u1}, {type_u2}, {type_u3}")
         logger.debug(
             f"Adding ({e1}, {e2}) is inconsistent with the current set_match")
-        raise Exception("Inconsistent with the set_match. alignment branch pruned.")
+        raise AlignmentConflict("Inconsistent with the set_match. alignment branch pruned.")
 
     logger.debug(f"Unique sets for (f1, f2): v1={v1}, v2={v2}, v3={v3}, u1={u1}, u2={u2}, u3={u3}")
     set_match_v1 = any(v1 in match for match in set_matches.values())
@@ -711,7 +714,7 @@ def handling_set_matches_isolated_edges(
         # If both directions are forbidden, we prune the branch.
         if forward_forbidden and backward_forbidden:
             logger.debug(f"Both directions for isolated edge {edge} yield forbidden implied edges. Pruning branch.")
-            raise Exception(
+            raise AlignmentConflict(
                 "Forbidden implied edge encountered in handling isolated set_matches: alignment branch pruned.")
 
         # Otherwise, select the safe direction.
@@ -899,7 +902,7 @@ def find_best_alignment(
                             edge_type_map_1, edge_type_map_2, set_type_map_1, set_type_map_2,
                             alignment_edge_type_map, alignment_set_type_map
                         )
-                    except Exception as ex:
+                    except AlignmentConflict as ex:
                         logger.debug(
                             f"Forbidden implied edge encountered when adding ({e1}, {e2}): {ex}. Rolling back and pruning this branch.")
                         # Restore previous state and skip further exploration of this branch.
@@ -1095,7 +1098,8 @@ def refine_alignment_with_unaligned_edges(
                 new_w = frozenset(updated_w)
 
                 alignment_sets[alignment_sets.index(existing_w)] = new_w
-                update_set_type_key(alignment_set_type_map, existing_w, existing_entry[1], new_w)
+                endpoint_type = type_ep1 if w1_entry else type_ep2
+                update_set_type_key(alignment_set_type_map, existing_w, endpoint_type, new_w)
 
                 matching_entry = next(((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items()
                                        if g == frozenset(endpoint_1 if w1_entry else endpoint_2)), None)
@@ -1131,7 +1135,21 @@ def refine_alignment_with_unaligned_edges(
                 continue
 
         if not progress:
-            logger.error(f"Could not find a related set for any of {U1} in first E-graph.")
+            # A whole unmatched component has no existing set-match to grow
+            # from. Preserve it as in/del columns instead of dropping it.
+            for source_set, typ in set_type_map_1:
+                if source_set & U1:
+                    if not source_set <= U1:
+                        raise RuntimeError("Incomplete endpoint mapping in first input")
+                    new_set = frozenset((e, None) for e in source_set)
+                    alignment_sets.append(new_set)
+                    alignment_set_type_map.append((new_set, typ))
+                    set_matches[(new_set, typ)] = (source_set, 'nothing')
+            for e in list(U1):
+                column = (e, None)
+                alignment_edges.append(column)
+                alignment_edge_type_map[str(column)] = edge_type_map_1[str(e)]
+            U1.clear()
             break
 
     logger.debug("=== START PROCESSING UNALIGNED EDGES IN SECOND E-GRAPH ===")
@@ -1221,7 +1239,8 @@ def refine_alignment_with_unaligned_edges(
                 updated_w.add(pad_edge(e, current_depth))
                 new_w = frozenset(updated_w)
                 alignment_sets[alignment_sets.index(existing_w)] = new_w
-                update_set_type_key(alignment_set_type_map, existing_w, existing_entry[1], new_w)
+                endpoint_type = type_ep1 if w1_entry else type_ep2
+                update_set_type_key(alignment_set_type_map, existing_w, endpoint_type, new_w)
 
                 matching_entry = next(((s_key, t_key) for (s_key, t_key), (g, h) in set_matches.items()
                                        if h == frozenset(endpoint_1 if w1_entry else endpoint_2)), None)
@@ -1259,7 +1278,19 @@ def refine_alignment_with_unaligned_edges(
                 continue
 
         if not progress:
-            logger.error(f"Could not find a related set for any of {U2} in second E-graph.")
+            for source_set, typ in set_type_map_2:
+                if source_set & U2:
+                    if not source_set <= U2:
+                        raise RuntimeError("Incomplete endpoint mapping in second input")
+                    new_set = frozenset(pad_edge(e, current_depth) for e in source_set)
+                    alignment_sets.append(new_set)
+                    alignment_set_type_map.append((new_set, typ))
+                    set_matches[(new_set, typ)] = ('nothing', source_set)
+            for e in list(U2):
+                column = pad_edge(e, current_depth)
+                alignment_edges.append(column)
+                alignment_edge_type_map[str(column)] = edge_type_map_2[str(e)]
+            U2.clear()
             break
 
     logger.debug("=== FINISHED PROCESSING UNALIGNED EDGES ===")
@@ -1326,6 +1357,7 @@ def align_multiple_e_graphs(
                 singleton = frozenset({edge})
                 graph_sets.append(singleton)
                 graph_sets.append(singleton)
+                set_type_maps[i].append((singleton, None))
                 set_type_maps[i].append((singleton, None))
             elif appearance_count != 2:
                 raise ValueError(
