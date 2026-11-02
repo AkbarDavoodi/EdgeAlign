@@ -1,27 +1,59 @@
 # EdgeAlign
 
-**EdgeAlign** is a Python tool for aligning multiple E-graphs (edge-centric graph representations) based on the framework presented in:
+**EdgeAlign** is a Python reference prototype for progressive alignment of E-graphs (edge-centric graph representations), based on the framework presented in:
 
 > Akbar Davoodi, Christoph Flamm, Daniel Merkle, and Peter F Stadler, "Edge‑wise Graph Alignments", *Submitted*.
 
-This repository provides a working implementation of progressive E-graph alignments using a VF2-inspired backtracking approach. The method computes pairwise alignments and then combines them into a composite multiple alignment, making it particularly useful in applications such as cheminformatics.
-
+The current implementation follows Algorithms 5 and 6 of the revised manuscript. It adds the input E-graphs one at a time to a growing alignment, using a pairwise search that jointly resolves edge matches and endpoint orientations. The prototype illustrates the E-graph alignment framework, including applications in cheminformatics.
 
 
 ## Overview
 
-In traditional graph alignment, graphs are compared based on their vertices. **EdgeAlign** represents graphs as E-graphs, where edges are the primary objects and vertices are encoded implicitly via incidence sets. This representation offers several advantages:
-- **Recursive Backtracking:** Inspired by the VF2 algorithm, it recursively explores candidate edge matches.
-- **Progressive Alignment:** Multiple E-graphs are aligned progressively to construct a composite alignment.
+EdgeAlign treats graph edges as the basic objects (called points in an E-graph). Incidence sets represent their endpoint vertices. In molecular examples, points represent bonds and incidence sets represent atoms.
 
+### Pairwise search (Algorithm 6)
 
+The active pairwise routine is `find_best_alignment` in `EdgeAlign.py`:
 
+- It maintains an injective map between endpoint records and explores both endpoint orientations of each candidate edge pair.
+- Edge `type` and endpoint `set_type` values must agree for a match to be accepted. Matching uses equality; JSON `null` is not a wildcard for a known label.
+- For each endpoint map, closure includes every overlapping edge pair implied by that map. An overlap with incompatible edge labels rejects the state.
+- Every feasible closed state, including the empty matching, is scored. Visited endpoint maps are memoized, candidates are traversed in a fixed order, and an upper bound prunes states that cannot improve the best score.
+- After search, the saved optimum is used to build the alignment. All unmatched edges, including disconnected components, are retained as gap columns.
+
+The objective is the lexicographic score `(c(M), |M|)`: first maximize the number of columns present in **all** rows aligned so far, then maximize the number of point pairs matched in the current pairwise step. This is the objective of the current prototype; it is not a sum-of-pairs score or a soft vertex-label score.
+
+### Progressive alignment and optimization scope
+
+The input order defines a caterpillar guide tree. Each pairwise search is exact for the stated score on the two **fixed representatives**, without additional ambiguous-set merges. Earlier choices are retained. The routine returns one optimum rather than enumerating every co-optimal alignment; input order and earlier choices can affect later results. The complete multiple alignment is therefore a progressive heuristic, with no guarantee of global optimality. With hard labels, the search optimizes feasible closed E-graph matchings; this should not be described as a general exact solver for labelled MCES.
+
+Endpoints are stored as separate indexed records. In particular, the two endpoints of an isolated edge remain distinct even when their singleton incidence sets and labels coincide. This is an implementation representation; suppressing the two endpoint records recovers the canonical isolated-point convention of the manuscript.
+
+### Runtime and limitations
+
+Appendix B of the revised manuscript reports a comparison with a direct recursive prototype that includes correctness fixes, resolves isolated-match orientations after search, and has neither memoization nor upper-bound pruning. On the reported pair of uniformly labelled seven-edge trees, the median runtime decreases from 16.824819 s to 0.20250054 s (about 83-fold). This is the **combined** effect of the implementation changes, not an isolated measurement of any one optimization or a general speedup guarantee.
+
+The benchmark uses a path on vertices `0, ..., n` and a second tree obtained by replacing edge `{n-1, n}` with `{1, n}`. Edge labels are uniform; vertex labels are either uniform or repeat C/N/O in vertex-index order. The manuscript reports medians of three runs and a 60-second timeout. The completed ranges increase from 7 to 10 edges per input for uniform labels and from 9 to 14 for repeating C/N/O labels. Runtime still grows rapidly; the prototype is intended as a reference implementation. Further exploitation of E-graph structure is future work.
+
+These timings are reported manuscript measurements, not timings generated by running the example commands below.
+
+### Repository files
+
+| File | Purpose |
+| --- | --- |
+| `EdgeAlign.py` | Current reference implementation; use this entry point. |
+| `data.json` | A separate four-graph demonstration with generic labels. |
+| `examples/showcase_input.json` | Explicit copy of the built-in five-molecule example used in the manuscript. |
+| `examples/showcase_expected.json` | Verified alignment columns, incidence records and progressive scores for that example, with provenance. |
+| `tests/test_correctness.py` | Regression checks for projection, incidence, labels, unmatched components and error propagation. |
+| `smilesToInput.py` | Optional SMILES-to-input conversion and labelled molecule drawing. |
+| `smilesToInput-withHighlight.py` | Optional molecule drawing with alignment-based highlights from an INFO log. |
 
 ## Installation
 
 ### Prerequisites
 
-- **Python:** Version 3.7 or later.
+- **Python:** Python 3.12 is recommended; the reviewed implementation was checked with Python 3.12.14.
 - **Required Packages:**  
   - `networkx`
   - `matplotlib`
@@ -29,18 +61,27 @@ In traditional graph alignment, graphs are compared based on their vertices. **E
 Install the required packages using pip (if not already installed):
 
 ```bash
-pip install networkx matplotlib
+python -m pip install networkx matplotlib
 ```
 
-Then, change into the repository directory:
+To obtain the repository:
 
 ```bash
+git clone https://github.com/AkbarDavoodi/EdgeAlign.git
 cd EdgeAlign
 ```
 
+The optional SMILES conversion and highlighting scripts also require RDKit and Pillow:
+
+```bash
+python -m pip install rdkit pillow
+```
+
+The core alignment script does not require RDKit. It currently imports NetworkX and Matplotlib, so both remain installation dependencies.
+
 ## Usage
 
-The main script is `EdgeAlign.py`, which supports configurable logging and JSON input.
+The main script is `EdgeAlign.py`, which accepts JSON input and supports `--log-level` and `--log-file`.
 
 ### Running from the Command Line
 
@@ -55,7 +96,43 @@ For more detailed (debug) output, use:
 ```bash
 python EdgeAlign.py --input data.json --log-level DEBUG
 ```
-If no input file is provided, the tool uses built-in test data.
+If no input file is provided, the script uses the built-in **five-molecule manuscript example**. The repository's `data.json` is a different, four-graph demonstration.
+
+To run the manuscript example explicitly and save its output:
+
+```bash
+python EdgeAlign.py --input examples/showcase_input.json --log-level INFO --log-file showcase.log
+```
+
+Equivalently, run the built-in example:
+
+```bash
+python EdgeAlign.py --log-level INFO --log-file showcase.log
+```
+
+Output is written through logging, to the terminal's standard error stream and, when requested, to `--log-file`. The CLI does not produce JSON alignment output on standard output. It reports alignment columns, incidence sets, endpoint correspondence records and label maps. Nested tuples encode progressive columns; `None` denotes a gap.
+
+For the reviewed revision, the five-molecule example gives progressive scores `(6, 6)`, `(5, 6)`, `(5, 7)` and `(4, 5)`, with 12 final columns and four columns present in all five molecules. The saved expected output records the reviewed commit. Co-optimal solutions may have different correspondences or display orders.
+
+### Regression tests
+
+Run from the repository root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+### Python interface
+
+```python
+import EdgeAlign as ea
+
+ea.configure_logging("WARNING")
+edges, sets = ea.load_data_from_json("examples/showcase_input.json")
+columns, incidence, endpoint_matches, edge_types, vertex_types = ea.align_multiple_e_graphs(edges, sets)
+```
+
+`endpoint_matches` describes the last progressive merge. Its keys contain an aligned incidence set and an endpoint identifier; that identifier is not the vertex label. Vertex labels are returned separately in `vertex_types`.
 
 
 ### Running in an IDE (e.g., PyCharm)
@@ -71,9 +148,11 @@ To run the script in PyCharm:
 
 ## Input Format
 
-EdgeAlign expects the input to be provided as a JSON file with two keys: `edges_list` and `sets_list`.
+EdgeAlign expects a JSON file with two keys: `edges_list` and `sets_list`. They must contain the same positive number of graphs in corresponding order. Use unique string `id` values for edges across the complete input; `type` is the edge's matching label, and `set_type` is the endpoint vertex's matching label.
 
-### Example `data.json`
+The JSON below is the five-molecule example also saved in `examples/showcase_input.json`; it is not the four-graph `data.json` shipped at the repository root.
+
+### Five-molecule example
 
 ```json
 {
@@ -139,14 +218,13 @@ EdgeAlign expects the input to be provided as a JSON file with two keys: `edges_
 }
 ```
 
-**Important Validations:**
-- **Edge Appearance:**  
-  Each edge from `edges_list` must appear in either 0 or 2 incidence sets.
-  If an edge appears in any number of sets other than 0 or 2, an error is raised.
-- **Distinct Edge Labels (Recommendation):**  
-  It is recommended that edge labels are distinct across E-graphs for clearer output and readability.  
-  Duplicate edge labels are allowed and the tool will still run correctly, but using unique labels is advised to avoid ambiguous or less interpretable results.
+**Input requirements and checks:**
 
+- **Incidence:** Each edge must occur in either zero or two incidence-set records. Zero occurrences represent an isolated edge; the implementation adds two singleton endpoint records with label `None`. An edge occurring once or more than twice raises `ValueError`.
+- **Isolated-edge endpoints:** To provide explicit endpoint labels for an isolated edge, include two records containing its singleton edge ID. Keep both records even if their contents and labels are identical.
+- **Unique IDs:** Duplicate edge `id` values, including duplicates across different E-graphs, raise `ValueError`. This is a requirement, not a recommendation. Matching labels such as `SINGLE`, `DOUBLE`, `C` and `N` may repeat freely.
+- **Graph model:** Inputs must represent simple, undirected graphs. Self-loops and parallel edges are outside this model; the pairwise endpoint routine explicitly rejects parallel edges. Isolated original vertices are outside the manuscript's edge-based model.
+- **Consistent records:** Every ID referenced by an incidence set must be declared in its graph's edge list. The loader checks the basic JSON structure and required keys, but it is not a complete graph-schema validator.
 
 **Converting SMILES Strings to Input Format:**
 
@@ -161,9 +239,13 @@ Each SMILES string is treated as a separate molecule.
 The resulting JSON can be used directly as input to `EdgeAlign`.
 
 To generate and view a labeled image of the molecules:
+
+```bash
 python smilesToInput.py "O=C1CCC(=O)N1" "O=C1NC(=O)C(C(=O)O)N1" --win > input.json
+```
 
 This will:
+
 - Save a PNG file `all_labeled_molecules.png` showing each molecule with labeled bond IDs.
 - Open the image in a pop-up window (if a graphical interface is available).
 
@@ -171,12 +253,16 @@ This will:
 
 `stdout`: JSON structure compatible with EdgeAlign
 `all_labeled_molecules.png`: Visual representation of molecules with bond labels
-No extra terminal output unless `--win` is used
+The image is saved even without `--win`; that flag additionally opens a display window.
 
 💡 Notes
-- Invalid SMILES strings are silently ignored.
+
+- Invalid SMILES strings are skipped; RDKit may emit parser diagnostics on standard error.
 - Edge labels are prefixed (e.g., `a1`, `b2`, ...) for uniqueness and clarity.
-- This script is especially useful for cheminformatics workflows.
+- Bond `type` values come from RDKit bond types, and endpoint `set_type` values are element symbols. The converter does not explicitly add hydrogens, and it does not encode stereochemistry, formal charge or isotope information as matching constraints.
+- Regenerating an input from SMILES can change bond IDs. Use `examples/showcase_input.json` when comparing to the manuscript's bond identifiers.
+
+The highlighting helper accepts `--sol showcase.log`. Use the same molecules in the same order as the input being highlighted; the generated bond IDs must also agree. Its filename is `smilesToInput-withHighlight.py`.
 
 
 ## How to Cite
@@ -196,13 +282,14 @@ You can also use the following BibTeX entry:
 }
 ```
 
-For further theoretical details and applications, please refer to the published paper.
+For further theoretical details and applications, please refer to the accompanying manuscript. Update the citation above when publication metadata becomes available.
 
 ---
 
 ## Contributing
 
 Contributions to **EdgeAlign** are welcome! To contribute:
+
 - **Fork the repository** and submit pull requests.
 - For major changes, please open an issue first to discuss your ideas.
 - Follow the code style and include tests when applicable.
@@ -210,3 +297,4 @@ Contributions to **EdgeAlign** are welcome! To contribute:
 ## License
 
 This project is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.
+
