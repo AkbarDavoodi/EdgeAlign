@@ -35,7 +35,7 @@ Appendix B of the paper reports a comparison with a direct recursive prototype t
 
 The benchmark uses a path on vertices `0, ..., n` and a second tree obtained by replacing edge `{n-1, n}` with `{1, n}`. Edge labels are uniform; vertex labels are either uniform or repeat C/N/O in vertex-index order. The paper reports medians of three runs and a 60-second timeout. The completed ranges increase from 7 to 10 edges per input for uniform labels and from 9 to 14 for repeating C/N/O labels. Runtime still grows rapidly; the prototype is intended as a reference implementation. Further exploitation of E-graph structure is future work.
 
-The benchmark driver used for Appendix B is `benchmarks/tree_pairs.py`. Run it from the repository root:
+A driver for reproducing the benchmark setup described in Appendix B is provided in `benchmarks/tree_pairs.py`. Run it from the repository root:
 
 ```bash
 python benchmarks/tree_pairs.py
