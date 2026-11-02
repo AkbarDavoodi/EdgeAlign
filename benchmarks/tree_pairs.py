@@ -11,8 +11,9 @@ Usage (from the repository root):
     python benchmarks/tree_pairs.py --module path/to/EdgeAlign_direct.py
 
 The direct recursive prototype compared in the paper is the EdgeAlign.py of
-git revision 7b0ef3b (tag v0.1-direct); extract it with
-    git show v0.1-direct:EdgeAlign.py > EdgeAlign_direct.py
+git revision 7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb; extract it
+from a Git clone with:
+    git show 7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb:EdgeAlign.py > EdgeAlign_direct.py
 """
 import argparse
 import importlib.util
@@ -86,7 +87,7 @@ def main():
             if times is None:
                 print(f"{family}\t{n}\ttimeout")
                 break
-            print(f"{family}\t{n}\t{statistics.median(times):.6f}\t{' '.join(f'{t:.4f}' for t in times)}")
+            print(f"{family}\t{n}\t{statistics.median(times):.9f}\t"f"{' '.join(f'{t:.9f}' for t in times)}")
             sys.stdout.flush()
 
 
