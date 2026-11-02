@@ -1,0 +1,192 @@
+{
+  "input_source": "Built-in five-molecule example in EdgeAlign.py at ceaa0db28806dffd5a0c09286fe9e97b526a233a",
+  "progressive_scores": [
+    [
+      6,
+      6
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "columns": [
+    [
+      "a1",
+      "b6",
+      "c6",
+      "d7",
+      "e2"
+    ],
+    [
+      "a5",
+      "b9",
+      "c2",
+      "d3",
+      "e6"
+    ],
+    [
+      "a6",
+      "b8",
+      "c3",
+      "d4",
+      "e4"
+    ],
+    [
+      "a7",
+      "b7",
+      "c4",
+      "d5",
+      "e3"
+    ],
+    [
+      null,
+      "b5",
+      "c5",
+      "d6",
+      "e1"
+    ],
+    [
+      "a4",
+      "b10",
+      "c1",
+      "d2",
+      null
+    ],
+    [
+      "a3",
+      "b3",
+      null,
+      "d1",
+      null
+    ],
+    [
+      "a2",
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      "b1",
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      "b2",
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      "b4",
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      "e5"
+    ]
+  ],
+  "incidence": [
+    {
+      "columns": [
+        1
+      ],
+      "label": "O"
+    },
+    {
+      "columns": [
+        1,
+        4,
+        5,
+        8
+      ],
+      "label": "C"
+    },
+    {
+      "columns": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "label": "C"
+    },
+    {
+      "columns": [
+        6,
+        7,
+        11
+      ],
+      "label": "C"
+    },
+    {
+      "columns": [
+        2,
+        3,
+        6,
+        12
+      ],
+      "label": "C"
+    },
+    {
+      "columns": [
+        2
+      ],
+      "label": "O"
+    },
+    {
+      "columns": [
+        3,
+        4
+      ],
+      "label": "N"
+    },
+    {
+      "columns": [
+        9
+      ],
+      "label": "O"
+    },
+    {
+      "columns": [
+        10
+      ],
+      "label": "O"
+    },
+    {
+      "columns": [
+        5,
+        11
+      ],
+      "label": "N"
+    },
+    {
+      "columns": [
+        12
+      ],
+      "label": "N"
+    }
+  ],
+  "source_commit": "ceaa0db28806dffd5a0c09286fe9e97b526a233a",
+  "columns_format": "Each column is flattened to five input rows; null is a gap.",
+  "incidence_format": "Column references are one-based indices into columns; each record is a distinct endpoint.",
+  "manuscript_comparison": "All 12 columns agree with the tab:columns table up to column order; endpoint labels and incidence were checked."
+}
