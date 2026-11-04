@@ -1,0 +1,20 @@
+{
+  "measurement_python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+  "cpu": "Apple M4 Pro",
+  "memory_bytes": 68719476736,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "archived_packages": {
+    "rdkit": "2026.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4",
+    "pillow": "13.0.0"
+  },
+  "provenance": {
+    "measurement_python": "Captured in the original Appendix B protocol.json.",
+    "hardware_os_and_packages": "Recovered from the earlier study.environment.json for the same benchmark machine and Python environment; not separately captured during the Appendix B timing campaign.",
+    "earlier_environment_record_sha256": "a48ebe79a665e41cbb0c114eefe32c25a04a6196141c8de238cae0f50cb818c1",
+    "package_scope": "NetworkX and Matplotlib are the alignment module imports. RDKit was used by the original independent validator, outside timing; the extracted validator here uses only the standard library."
+  }
+}

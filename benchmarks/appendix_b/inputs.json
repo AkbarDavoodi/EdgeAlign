@@ -1,0 +1,4622 @@
+[
+  {
+    "id": "pair_C_3",
+    "n": 3,
+    "family": "uniform",
+    "expected": 2,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_3",
+    "n": 3,
+    "family": "CNO",
+    "expected": 2,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_4",
+    "n": 4,
+    "family": "uniform",
+    "expected": 3,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_4",
+    "n": 4,
+    "family": "CNO",
+    "expected": 3,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3"
+            ],
+            "set_type": "N"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e3"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3"
+            ],
+            "set_type": "N"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_5",
+    "n": 5,
+    "family": "uniform",
+    "expected": 4,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_5",
+    "n": 5,
+    "family": "CNO",
+    "expected": 4,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4"
+            ],
+            "set_type": "O"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4"
+            ],
+            "set_type": "O"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_6",
+    "n": 6,
+    "family": "uniform",
+    "expected": 5,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_6",
+    "n": 6,
+    "family": "CNO",
+    "expected": 5,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e5"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_7",
+    "n": 7,
+    "family": "uniform",
+    "expected": 6,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_7",
+    "n": 7,
+    "family": "CNO",
+    "expected": 6,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6"
+            ],
+            "set_type": "N"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e6"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6"
+            ],
+            "set_type": "N"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_8",
+    "n": 8,
+    "family": "uniform",
+    "expected": 7,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e7"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e7"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_8",
+    "n": 8,
+    "family": "CNO",
+    "expected": 7,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7"
+            ],
+            "set_type": "O"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7"
+            ],
+            "set_type": "O"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_9",
+    "n": 9,
+    "family": "uniform",
+    "expected": 8,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e8"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e8"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_10",
+    "n": 10,
+    "family": "uniform",
+    "expected": 9,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_C_11",
+    "n": 11,
+    "family": "uniform",
+    "expected": 10,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e10"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e10"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e10"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_9",
+    "n": 9,
+    "family": "CNO",
+    "expected": 8,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e8"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_10",
+    "n": 10,
+    "family": "CNO",
+    "expected": 9,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9"
+            ],
+            "set_type": "N"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e9"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9"
+            ],
+            "set_type": "N"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_11",
+    "n": 11,
+    "family": "CNO",
+    "expected": 10,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e10"
+            ],
+            "set_type": "O"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e10"
+            ],
+            "set_type": "O"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_12",
+    "n": 12,
+    "family": "CNO",
+    "expected": 11,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e11",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e11",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e10",
+              "g0e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e11"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e11"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9",
+              "g1e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e10"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e11"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_13",
+    "n": 13,
+    "family": "CNO",
+    "expected": 12,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e12",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e12",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e10",
+              "g0e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e11",
+              "g0e12"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e12"
+            ],
+            "set_type": "N"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e12"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9",
+              "g1e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e10",
+              "g1e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e11"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e12"
+            ],
+            "set_type": "N"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_14",
+    "n": 14,
+    "family": "CNO",
+    "expected": 13,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e12",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e13",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e12",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e13",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e10",
+              "g0e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e11",
+              "g0e12"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e12",
+              "g0e13"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e13"
+            ],
+            "set_type": "O"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e13"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9",
+              "g1e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e10",
+              "g1e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e11",
+              "g1e12"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e12"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e13"
+            ],
+            "set_type": "O"
+          }
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "pair_CNO_15",
+    "n": 15,
+    "family": "CNO",
+    "expected": 14,
+    "inputs": [
+      [
+        [
+          {
+            "id": "g0e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e12",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e13",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g0e14",
+            "type": "SINGLE"
+          }
+        ],
+        [
+          {
+            "id": "g1e0",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e1",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e2",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e3",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e4",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e5",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e6",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e7",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e8",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e9",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e10",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e11",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e12",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e13",
+            "type": "SINGLE"
+          },
+          {
+            "id": "g1e14",
+            "type": "SINGLE"
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "edges": [
+              "g0e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e0",
+              "g0e1"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e1",
+              "g0e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e2",
+              "g0e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e3",
+              "g0e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e4",
+              "g0e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e5",
+              "g0e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e6",
+              "g0e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e7",
+              "g0e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e8",
+              "g0e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e9",
+              "g0e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e10",
+              "g0e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e11",
+              "g0e12"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g0e12",
+              "g0e13"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g0e13",
+              "g0e14"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g0e14"
+            ],
+            "set_type": "C"
+          }
+        ],
+        [
+          {
+            "edges": [
+              "g1e0"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e0",
+              "g1e1",
+              "g1e14"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e1",
+              "g1e2"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e2",
+              "g1e3"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e3",
+              "g1e4"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e4",
+              "g1e5"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e5",
+              "g1e6"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e6",
+              "g1e7"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e7",
+              "g1e8"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e8",
+              "g1e9"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e9",
+              "g1e10"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e10",
+              "g1e11"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e11",
+              "g1e12"
+            ],
+            "set_type": "C"
+          },
+          {
+            "edges": [
+              "g1e12",
+              "g1e13"
+            ],
+            "set_type": "N"
+          },
+          {
+            "edges": [
+              "g1e13"
+            ],
+            "set_type": "O"
+          },
+          {
+            "edges": [
+              "g1e14"
+            ],
+            "set_type": "C"
+          }
+        ]
+      ]
+    ]
+  }
+]
