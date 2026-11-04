@@ -46,7 +46,7 @@ environment record identifies an **Apple M4 Pro, 64 GiB RAM, macOS 26.6.2/arm64*
 and the package versions listed in `environment.json` (including NetworkX 3.7
 and Matplotlib 3.11.2). Hardware, OS and packages were not independently captured
 again during this timing campaign; their archival provenance is explicit.
-The README's Python 3.12.14 compatibility check is a separate observation.
+The [usage guide's Python 3.12.14 compatibility check](../../docs/usage.md#prerequisites) is a separate observation.
 
 ## Repeating the comparison
 

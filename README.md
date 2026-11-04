@@ -1,320 +1,62 @@
 # EdgeAlign
 
-**EdgeAlign** is a Python reference prototype for progressive alignment of E-graphs (edge-centric graph representations), based on the framework presented in:
+**EdgeAlign** is a Python reference implementation of the E-graph alignment framework presented in *Edge-wise Graph Alignments*. It treats graph edges as the objects being aligned, with their endpoint relationships represented by incidence sets. For molecular graphs, these correspond to bonds and atoms. The resulting alignment is itself an E-graph.
 
-> Akbar Davoodi, Christoph Flamm, Daniel Merkle, and Peter F Stadler, "Edge‑wise Graph Alignments", *Submitted*.
+The implementation follows Algorithms 5 and 6 of the paper. Each pairwise step uses exact search for the prototype’s objective on fixed representatives. The complete multiple alignment is progressive: its result can depend on input order, and global optimality is not guaranteed.
 
-The current implementation follows Algorithms 5 and 6 of the paper. It adds the input E-graphs one at a time to a growing alignment, using a pairwise search that jointly resolves edge matches and endpoint orientations. The prototype illustrates the E-graph alignment framework, including applications in cheminformatics.
+## Quick start
 
+Python 3.12 or newer is recommended. The core implementation requires NetworkX and Matplotlib.
 
-## Overview
+```bash
+git clone https://github.com/AkbarDavoodi/EdgeAlign.git
+cd EdgeAlign
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install networkx matplotlib
+python EdgeAlign.py --input examples/showcase_input.json --log-level INFO
+```
 
-EdgeAlign treats graph edges as the basic objects (called points in an E-graph). Incidence sets represent their endpoint vertices. In molecular examples, points represent bonds and incidence sets represent atoms.
+This runs the five-molecule example used in the paper. Results are printed through logging. Add `--log-file showcase.log` to save them. The supplied `examples/showcase_expected.json` records the expected alignment and progressive scores.
 
-### Pairwise search (Algorithm 6)
+## Your own inputs
 
-The active pairwise routine is `find_best_alignment` in `EdgeAlign.py`:
+Replace the example path with your JSON input file. Inputs contain `edges_list` and `sets_list`, describing labelled edges and their endpoint incidence sets. Edge identifiers must be unique across the complete input. Matches require equal edge and vertex labels.
 
-- It maintains an injective map between endpoint records and explores both endpoint orientations of each candidate edge pair.
-- Edge `type` and endpoint `set_type` values must agree for a match to be accepted. Matching uses equality; JSON `null` is not a wildcard for a known label.
-- For each endpoint map, closure includes every overlapping edge pair implied by that map. An overlap with incompatible edge labels rejects the state.
-- Every feasible closed state, including the empty matching, is scored. Visited endpoint maps are memoized, candidates are traversed in a fixed order, and an upper bound prunes states that cannot improve the best score.
-- After search, the saved optimum is used to build the alignment. All unmatched edges, including disconnected components, are retained as gap columns.
+Use [`examples/showcase_input.json`](examples/showcase_input.json) as a complete example. The [usage guide](docs/usage.md) explains the input rules, Python interface and output representation.
 
-The objective is the lexicographic score `(c(M), |M|)`: first maximize the number of columns present in **all** rows aligned so far, then maximize the number of point pairs matched in the current pairwise step. This is the objective of the current prototype; it is not a sum-of-pairs score or a soft vertex-label score.
+Optional SMILES conversion and molecular drawing helpers additionally require RDKit and Pillow; their commands and options are documented in the usage guide.
 
-### Progressive alignment and optimization scope
+## Reproduce Figure B1
 
-The input order defines a caterpillar guide tree. Each pairwise search is exact for the stated score on the two **fixed representatives**, without additional ambiguous-set merges. Earlier choices are retained. The routine returns one optimum rather than enumerating every co-optimal alignment; input order and earlier choices can affect later results. The complete multiple alignment is therefore a progressive heuristic, with no guarantee of global optimality. With hard labels, the search optimizes feasible closed E-graph matchings; this should not be described as a general exact solver for labelled MCES.
-
-Endpoints are stored as separate indexed records. In particular, the two endpoints of an isolated edge remain distinct even when their singleton incidence sets and labels coincide. This is an implementation representation; suppressing the two endpoint records recovers the canonical isolated-point convention of the paper.
-
-### Runtime and limitations
-
-Appendix B of the paper reports a comparison with a direct recursive prototype that includes correctness fixes, resolves isolated-match orientations after search, and has neither memoization nor upper-bound pruning. On the reported pair of uniformly labelled seven-edge trees, the median runtime decreases from 16.824819 s to 0.20250054 s (about 83-fold). This is the **combined** effect of the implementation changes, not an isolated measurement of any one optimization or a general speedup guarantee.
-
-The benchmark uses a path on vertices `0, ..., n` and a second tree obtained by replacing edge `{n-1, n}` with `{1, n}`. Edge labels are uniform; vertex labels are either uniform or repeat C/N/O in vertex-index order. The paper reports medians of three runs and a 60-second timeout. The completed ranges increase from 7 to 10 edges per input for uniform labels and from 9 to 14 for repeating C/N/O labels. Runtime still grows rapidly; the prototype is intended as a reference implementation. Further exploitation of E-graph structure is future work.
-
-A driver for the original Appendix B input and timing protocol is provided in `benchmarks/tree_pairs.py`. After installing the dependencies below, run **both compared versions** from the repository root with:
+Run both implementations compared in Appendix B with:
 
 ```bash
 python benchmarks/tree_pairs.py
 ```
 
-The exact measured versions are included as frozen files:
+The driver automatically selects the supplied **Direct recursive search** and **Algorithm 6** implementations. It reports medians of three runs with a 60-second limit per alignment call. Results are written to `tree-pairs-rerun/`; use `--output another-directory` for another run.
 
-| Figure B1 label | Benchmark implementation |
-| --- | --- |
-| Direct recursive search | [`benchmarks/versions/EdgeAlign_direct.py`](benchmarks/versions/EdgeAlign_direct.py) |
-| Endpoint-orientation search (Alg. 6) | [`benchmarks/versions/EdgeAlign_algorithm6.py`](benchmarks/versions/EdgeAlign_algorithm6.py) |
+Both measured code versions and the original timing records are included. The command works from a clone or ZIP download. Absolute runtimes and timeout positions depend on the execution environment.
 
-The command selects these files automatically. It works with a normal clone, a shallow clone, or a ZIP download; no Git commands or revision selection are needed. Their recorded revision IDs and checksums are retained in [`versions.json`](benchmarks/appendix_b/versions.json) for provenance.
+See the [benchmark documentation](benchmarks/appendix_b/README.md) for the protocol, recorded environment and original results. The benchmark runs on macOS and Linux; Windows users can use WSL.
 
-Each call runs in a fresh process with hash seed 0, and only the alignment call is timed. The driver reports medians of three runs, stops each method/family at its first 60-second timeout, and saves all attempts, inputs, source hashes and summaries in `tree-pairs-rerun/`. Existing directories are never overwritten; use `--output another-directory` for another run. Options include `--runs`, `--timeout`, and `--max-n`. The timeout uses POSIX `signal.setitimer`; on Windows use WSL.
+## Tests
 
-The [original Appendix B records](benchmarks/appendix_b/README.md) contain all 100 attempts (96 completions and four timeouts), exact inputs, summaries, protocol and environment provenance. Measurements used Python **3.13.7** on an Apple M4 Pro with 64 GiB RAM; hardware, OS and package details were recovered from the earlier same-environment archive, as documented there. Absolute timings depend on the machine. These are the original observations, not new measurements.
-
-### Repository files
-
-| File | Purpose |
-| --- | --- |
-| `EdgeAlign.py` | Current reference implementation; use this entry point. |
-| `data.json` | A separate four-graph demonstration with generic labels. |
-| `examples/showcase_input.json` | Explicit copy of the built-in five-molecule example used in the paper. |
-| `examples/showcase_expected.json` | Verified alignment columns, incidence records and progressive scores for that example, with provenance. |
-| `tests/test_correctness.py` | Regression checks for projection, incidence, labels, unmatched components and error propagation. |
-| `benchmarks/tree_pairs.py` | Driver for the synthetic tree-pair runtime benchmark of Appendix B. |
-| `benchmarks/versions/` | Frozen Direct and Algorithm 6 implementations used in Figure B1. |
-| `benchmarks/appendix_b/` | Original Appendix B inputs, timing/timeout records, measured revisions and environment details. |
-| `smilesToInput.py` | Optional SMILES-to-input conversion and labelled molecule drawing. |
-| `smilesToInput-withHighlight.py` | Optional molecule drawing with alignment-based highlights from an INFO log. |
-
-## Installation
-
-### Prerequisites
-
-- **Python:** Python 3.12 is recommended; the reviewed implementation was checked with Python 3.12.14. This compatibility check is separate from the Appendix B measurements, which used Python 3.13.7.
-- **Required Packages:**  
-  - `networkx`
-  - `matplotlib`
-
-Install the required packages using pip (if not already installed):
-
-```bash
-python -m pip install networkx matplotlib
-```
-
-To obtain the repository:
-
-```bash
-git clone https://github.com/AkbarDavoodi/EdgeAlign.git
-cd EdgeAlign
-```
-
-The optional SMILES conversion and highlighting scripts also require RDKit and Pillow:
-
-```bash
-python -m pip install rdkit pillow
-```
-
-The core alignment script does not require RDKit. It currently imports NetworkX and Matplotlib, so both remain installation dependencies.
-
-## Usage
-
-The main script is `EdgeAlign.py`, which accepts JSON input and supports `--log-level` and `--log-file`.
-
-### Running from the Command Line
-
-If you have a JSON input file (see [Input Format](#input-format) below), run the tool as follows:
-
-```bash
-python EdgeAlign.py --input data.json --log-level INFO
-```
-
-For more detailed (debug) output, use:
-
-```bash
-python EdgeAlign.py --input data.json --log-level DEBUG
-```
-If no input file is provided, the script uses the built-in **five-molecule paper example**. The repository's `data.json` is a different, four-graph demonstration.
-
-To run the paper example explicitly and save its output:
-
-```bash
-python EdgeAlign.py --input examples/showcase_input.json --log-level INFO --log-file showcase.log
-```
-
-Equivalently, run the built-in example:
-
-```bash
-python EdgeAlign.py --log-level INFO --log-file showcase.log
-```
-
-Output is written through logging, to the terminal's standard error stream and, when requested, to `--log-file`. The CLI does not produce JSON alignment output on standard output. It reports alignment columns, incidence sets, endpoint correspondence records and label maps. Nested tuples encode progressive columns; `None` denotes a gap.
-
-For the reviewed revision, the five-molecule example gives progressive scores `(6, 6)`, `(5, 6)`, `(5, 7)` and `(4, 5)`, with 12 final columns and four columns present in all five molecules. The saved expected output records the reviewed commit. Co-optimal solutions may have different correspondences or display orders.
-
-### Regression tests
-
-Run from the repository root:
+Run the regression checks with:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-### Python interface
+## Documentation
 
-```python
-import EdgeAlign as ea
+The [usage guide](docs/usage.md) covers detailed input requirements, command-line options, the Python API, molecular conversion and drawing tools, and the implementation’s objective and limitations.
 
-ea.configure_logging("WARNING")
-edges, sets = ea.load_data_from_json("examples/showcase_input.json")
-columns, incidence, endpoint_matches, edge_types, vertex_types = ea.align_multiple_e_graphs(edges, sets)
-```
+## Citation and license
 
-`endpoint_matches` describes the last progressive merge. Its keys contain an aligned incidence set and an endpoint identifier; that identifier is not the vertex label. Vertex labels are returned separately in `vertex_types`.
+Please cite:
 
+> Akbar Davoodi, Christoph Flamm, Daniel Merkle, and Peter F. Stadler. *Edge-wise Graph Alignments*. Submitted.
 
-### Running in an IDE (e.g., PyCharm)
-
-To run the script in PyCharm:
-
-1. Open **Run > Edit Configurations...** in PyCharm.
-2. In the **Script parameters** field, enter:
-```bash
---input data.json --log-level INFO
-```
-3. Ensure that `data.json` is in the same directory as `EdgeAlign.py` (or adjust the path accordingly).
-
-## Input Format
-
-EdgeAlign expects a JSON file with two keys: `edges_list` and `sets_list`. They must contain the same positive number of graphs in corresponding order. Use unique string `id` values for edges across the complete input; `type` is the edge's matching label, and `set_type` is the endpoint vertex's matching label.
-
-The JSON below is the five-molecule example also saved in `examples/showcase_input.json`; it is not the four-graph `data.json` shipped at the repository root.
-
-### Five-molecule example
-
-```json
-{
-  "edges_list": [
-    [
-      {"id": "a1", "type": "DOUBLE"}, {"id": "a2", "type": "SINGLE"}, {"id": "a3", "type": "SINGLE"},
-      {"id": "a4", "type": "SINGLE"}, {"id": "a5", "type": "DOUBLE"}, {"id": "a6", "type": "SINGLE"},
-      {"id": "a7", "type": "SINGLE"}
-    ],
-    [
-      {"id": "b1", "type": "DOUBLE"}, {"id": "b2", "type": "SINGLE"}, {"id": "b3", "type": "SINGLE"},
-      {"id": "b4", "type": "SINGLE"}, {"id": "b5", "type": "SINGLE"}, {"id": "b6", "type": "DOUBLE"},
-      {"id": "b7", "type": "SINGLE"}, {"id": "b8", "type": "SINGLE"}, {"id": "b9", "type": "DOUBLE"},
-      {"id": "b10", "type": "SINGLE"}
-    ],
-    [
-      {"id": "c1", "type": "SINGLE"}, {"id": "c2", "type": "DOUBLE"}, {"id": "c3", "type": "SINGLE"},
-      {"id": "c4", "type": "SINGLE"}, {"id": "c5", "type": "SINGLE"}, {"id": "c6", "type": "DOUBLE"}
-    ],
-    [
-      {"id": "d1", "type": "SINGLE"}, {"id": "d2", "type": "SINGLE"}, {"id": "d3", "type": "DOUBLE"},
-      {"id": "d4", "type": "SINGLE"}, {"id": "d5", "type": "SINGLE"}, {"id": "d6", "type": "SINGLE"},
-      {"id": "d7", "type": "DOUBLE"}
-    ],
-    [
-      {"id": "e1", "type": "SINGLE"}, {"id": "e2", "type": "DOUBLE"}, {"id": "e3", "type": "SINGLE"},
-      {"id": "e4", "type": "SINGLE"}, {"id": "e5", "type": "SINGLE"}, {"id": "e6", "type": "DOUBLE"}
-    ]
-  ],
-  "sets_list": [
-    [
-      {"edges": ["a1"], "set_type": "O"}, {"edges": ["a1", "a2", "a7"], "set_type": "C"},
-      {"edges": ["a2", "a3"], "set_type": "C"}, {"edges": ["a3", "a4"], "set_type": "C"},
-      {"edges": ["a4", "a5", "a6"], "set_type": "C"}, {"edges": ["a5"], "set_type": "O"},
-      {"edges": ["a6", "a7"], "set_type": "N"}
-    ],
-    [
-      {"edges": ["b1"], "set_type": "O"}, {"edges": ["b1", "b2", "b3"], "set_type": "C"},
-      {"edges": ["b2"], "set_type": "O"}, {"edges": ["b3", "b4", "b10"], "set_type": "C"},
-      {"edges": ["b4", "b5"], "set_type": "N"}, {"edges": ["b5", "b6", "b7"], "set_type": "C"},
-      {"edges": ["b6"], "set_type": "O"}, {"edges": ["b7", "b8"], "set_type": "N"},
-      {"edges": ["b8", "b9", "b10"], "set_type": "C"}, {"edges": ["b9"], "set_type": "O"}
-    ],
-    [
-      {"edges": ["c1"], "set_type": "C"}, {"edges": ["c1", "c2", "c3"], "set_type": "C"},
-      {"edges": ["c2"], "set_type": "O"}, {"edges": ["c3", "c4"], "set_type": "N"},
-      {"edges": ["c4", "c5", "c6"], "set_type": "C"}, {"edges": ["c5"], "set_type": "N"},
-      {"edges": ["c6"], "set_type": "O"}
-    ],
-    [
-      {"edges": ["d1"], "set_type": "C"}, {"edges": ["d1", "d2"], "set_type": "C"},
-      {"edges": ["d2", "d3", "d4"], "set_type": "C"}, {"edges": ["d3"], "set_type": "O"},
-      {"edges": ["d4", "d5"], "set_type": "N"}, {"edges": ["d5", "d6", "d7"], "set_type": "C"},
-      {"edges": ["d6"], "set_type": "N"}, {"edges": ["d7"], "set_type": "O"}
-    ],
-    [
-      {"edges": ["e1"], "set_type": "N"}, {"edges": ["e1", "e2", "e3"], "set_type": "C"},
-      {"edges": ["e2"], "set_type": "O"}, {"edges": ["e3", "e4"], "set_type": "N"},
-      {"edges": ["e4", "e5", "e6"], "set_type": "C"}, {"edges": ["e5"], "set_type": "N"},
-      {"edges": ["e6"], "set_type": "O"}
-    ]
-  ]
-}
-```
-
-**Input requirements and checks:**
-
-- **Incidence:** Each edge must occur in either zero or two incidence-set records. Zero occurrences represent an isolated edge; the implementation adds two singleton endpoint records with label `None`. An edge occurring once or more than twice raises `ValueError`.
-- **Isolated-edge endpoints:** To provide explicit endpoint labels for an isolated edge, include two records containing its singleton edge ID. Keep both records even if their contents and labels are identical.
-- **Unique IDs:** Duplicate edge `id` values, including duplicates across different E-graphs, raise `ValueError`. This is a requirement, not a recommendation. Matching labels such as `SINGLE`, `DOUBLE`, `C` and `N` may repeat freely.
-- **Graph model:** Inputs must represent simple, undirected graphs. Self-loops and parallel edges are outside this model; the pairwise endpoint routine explicitly rejects parallel edges. Isolated original vertices are outside the paper's edge-based model.
-- **Consistent records:** Every ID referenced by an incidence set must be declared in its graph's edge list. The loader checks the basic JSON structure and required keys, but it is not a complete graph-schema validator.
-
-**Converting SMILES Strings to Input Format:**
-
-If you're working with chemical structures, you can generate valid input JSON for `EdgeAlign` using the provided script: `smilesToInput.py`.
-This script takes one or more SMILES strings and outputs a properly formatted JSON file with the required `edges_list` and `sets_list`.
-
-```bash
-python smilesToInput.py "O=C1CCC(=O)N1" "O=C1NC(=O)C(C(=O)O)N1" > input.json
-```
-
-Each SMILES string is treated as a separate molecule.
-The resulting JSON can be used directly as input to `EdgeAlign`.
-
-To generate and view a labeled image of the molecules:
-
-```bash
-python smilesToInput.py "O=C1CCC(=O)N1" "O=C1NC(=O)C(C(=O)O)N1" --win > input.json
-```
-
-This will:
-
-- Save a PNG file `all_labeled_molecules.png` showing each molecule with labeled bond IDs.
-- Open the image in a pop-up window (if a graphical interface is available).
-
-📤 Output
-
-`stdout`: JSON structure compatible with EdgeAlign
-`all_labeled_molecules.png`: Visual representation of molecules with bond labels
-The image is saved even without `--win`; that flag additionally opens a display window.
-
-💡 Notes
-
-- Invalid SMILES strings are skipped; RDKit may emit parser diagnostics on standard error.
-- Edge labels are prefixed (e.g., `a1`, `b2`, ...) for uniqueness and clarity.
-- Bond `type` values come from RDKit bond types, and endpoint `set_type` values are element symbols. The converter does not explicitly add hydrogens, and it does not encode stereochemistry, formal charge or isotope information as matching constraints.
-- Regenerating an input from SMILES can change bond IDs. Use `examples/showcase_input.json` when comparing to the paper's bond identifiers.
-
-The highlighting helper accepts `--sol showcase.log`. Use the same molecules in the same order as the input being highlighted; the generated bond IDs must also agree. Its filename is `smilesToInput-withHighlight.py`.
-
-
-## How to Cite
-
-If you use **EdgeAlign** in your research, please consider citing the following work:
-
-> Akbar Davoodi, Christoph Flamm, Daniel Merkle, and Peter F Stadler, "Edge‑wise Graph Alignments", *Submitted*.
-
-You can also use the following BibTeX entry:
-
-```bibtex
-@article{EdgeAlign25,
-  title={Edge‑wise Graph Alignments},
-  author={Davoodi, Akbar and Flamm, Christoph and Merkle, Daniel and Stadler, Peter F},
-  journal={Submitted},
-  year={2025}
-}
-```
-
-For further theoretical details and applications, please refer to the accompanying paper. Update the citation above when publication metadata becomes available.
-
----
-
-## Contributing
-
-Contributions to **EdgeAlign** are welcome! To contribute:
-
-- **Fork the repository** and submit pull requests.
-- For major changes, please open an issue first to discuss your ideas.
-- Follow the code style and include tests when applicable.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.
-
+EdgeAlign is distributed under the [MIT License](LICENSE).
