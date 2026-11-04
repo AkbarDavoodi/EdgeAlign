@@ -2,11 +2,13 @@
   "before": {
     "commit": "7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb",
     "path": "EdgeAlign.py",
-    "sha256": "cfe1d901729410ac893b11477eea76039a049b076298bd6d1af3381a01840436"
+    "sha256": "cfe1d901729410ac893b11477eea76039a049b076298bd6d1af3381a01840436",
+    "snapshot": "benchmarks/versions/EdgeAlign_direct.py"
   },
   "algorithm6": {
     "commit": "ceaa0db28806dffd5a0c09286fe9e97b526a233a",
     "path": "EdgeAlign.py",
-    "sha256": "555bafbe6ba8770b7ee18caf27df8b792d4214600841a26f6b776c3da4913952"
+    "sha256": "555bafbe6ba8770b7ee18caf27df8b792d4214600841a26f6b776c3da4913952",
+    "snapshot": "benchmarks/versions/EdgeAlign_algorithm6.py"
   }
 }

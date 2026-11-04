@@ -9,15 +9,16 @@ from the archived scaling study. No new timing campaign is included.
 | `runs.jsonl` | All 100 attempts: 96 completed calls and four timeouts; elapsed seconds and repetition indices. |
 | `summary.json` | The 36 method/instance summaries; medians require three completed calls. |
 | `protocol.json` | Original measurement protocol, including Python version, timing scope and source hashes. |
-| `versions.json` | Full Git commit IDs and SHA-256 hashes of the two measured `EdgeAlign.py` files. |
+| `versions.json` | Frozen source paths, original Git commit IDs and SHA-256 checksums. |
 | `environment.json` | Measurement Python version and recovered machine/software details, with provenance. |
 
 The method names `before` and `algorithm6` in these records mean **Direct
 recursive search** and **Endpoint-orientation search (Alg. 6)**, respectively.
-The former includes correctness fixes; it is not the unmodified submitted code.
-Its measured commit is `7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb`; the Algorithm 6
-commit is `ceaa0db28806dffd5a0c09286fe9e97b526a233a`. Both files are available
-in the repository history; `EdgeAlign0.py` was not used in this comparison.
+Both measured implementations are included directly in [`../versions/`](../versions/):
+`EdgeAlign_direct.py` and `EdgeAlign_algorithm6.py`. The former includes
+correctness fixes; it is not the unmodified submitted code. These frozen files
+are identical to the measured sources. Their original revision IDs and checksums
+are recorded in `versions.json`; running the comparison requires no Git history.
 
 ## Measurement protocol
 
@@ -37,7 +38,7 @@ to the plotted medians.
 For sizes 3 through 8, methods alternated within each repetition, serially.
 Algorithm 6 was then extended from size 9 until the first timeout in each family.
 The direct recursive C/N/O series was extended afterwards with the same protocol.
-The driver follows this order when `--baseline` is supplied. On a faster machine,
+The driver follows this order automatically. On a faster machine,
 it can also extend the direct uniform series beyond size 8 if no timeout occurs.
 
 The original protocol records **Python 3.13.7**. The earlier same-machine
@@ -49,19 +50,20 @@ The README's Python 3.12.14 compatibility check is a separate observation.
 
 ## Repeating the comparison
 
-Use a full clone, Python 3.13.7 and the archived package versions to reconstruct
-the recorded environment. From the repository root:
+After installing the dependencies, run this single command from the repository
+root to compare **Direct** and **Algorithm 6**:
 
 ```bash
-benchmark_dir=$(mktemp -d)
-git show 7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb:EdgeAlign.py > "$benchmark_dir/EdgeAlign_direct.py"
-git show ceaa0db28806dffd5a0c09286fe9e97b526a233a:EdgeAlign.py > "$benchmark_dir/EdgeAlign_algorithm6.py"
-PYTHONHASHSEED=0 PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg python benchmarks/tree_pairs.py \
-  --baseline "$benchmark_dir/EdgeAlign_direct.py" --module "$benchmark_dir/EdgeAlign_algorithm6.py" \
-  --output "$benchmark_dir/results"
+python benchmarks/tree_pairs.py
 ```
 
-The output directory must not exist. It receives fresh `runs.jsonl`,
+This works from a clone or ZIP download. Both frozen versions are selected
+automatically, and the driver sets the worker environment. To match the recorded
+software environment, use Python 3.13.7 and the archived package versions.
+
+Results are written to the new directory `tree-pairs-rerun/`. For another run,
+choose a different directory with `--output another-directory`; existing output
+is never overwritten. The directory receives fresh `runs.jsonl`,
 `inputs.json`, `summary.json` and `protocol.json`; the archived observations
 remain untouched. The driver prints the medians and timeout status. Every
 completed result is checked outside the timer using the original independent
