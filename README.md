@@ -35,24 +35,22 @@ Appendix B of the paper reports a comparison with a direct recursive prototype t
 
 The benchmark uses a path on vertices `0, ..., n` and a second tree obtained by replacing edge `{n-1, n}` with `{1, n}`. Edge labels are uniform; vertex labels are either uniform or repeat C/N/O in vertex-index order. The paper reports medians of three runs and a 60-second timeout. The completed ranges increase from 7 to 10 edges per input for uniform labels and from 9 to 14 for repeating C/N/O labels. Runtime still grows rapidly; the prototype is intended as a reference implementation. Further exploitation of E-graph structure is future work.
 
-A driver for the original Appendix B input and timing protocol is provided in `benchmarks/tree_pairs.py`. Run the current implementation from the repository root:
+A driver for the original Appendix B input and timing protocol is provided in `benchmarks/tree_pairs.py`. After installing the dependencies below, run **both compared versions** from the repository root with:
 
 ```bash
-python benchmarks/tree_pairs.py --output /tmp/edgealign-tree-pairs-rerun
+python benchmarks/tree_pairs.py
 ```
 
-The two measured versions are `EdgeAlign.py` at commits [`7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb`](https://github.com/AkbarDavoodi/EdgeAlign/blob/7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb/EdgeAlign.py) (direct recursive search, including correctness fixes) and [`ceaa0db28806dffd5a0c09286fe9e97b526a233a`](https://github.com/AkbarDavoodi/EdgeAlign/blob/ceaa0db28806dffd5a0c09286fe9e97b526a233a/EdgeAlign.py) (Algorithm 6). Both remain available in the Git history. To compare these exact revisions:
+The exact measured versions are included as frozen files:
 
-```bash
-benchmark_dir=$(mktemp -d)
-git show 7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb:EdgeAlign.py > "$benchmark_dir/EdgeAlign_direct.py"
-git show ceaa0db28806dffd5a0c09286fe9e97b526a233a:EdgeAlign.py > "$benchmark_dir/EdgeAlign_algorithm6.py"
-PYTHONHASHSEED=0 PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg python benchmarks/tree_pairs.py \
-  --baseline "$benchmark_dir/EdgeAlign_direct.py" --module "$benchmark_dir/EdgeAlign_algorithm6.py" \
-  --output "$benchmark_dir/results"
-```
+| Figure B1 label | Benchmark implementation |
+| --- | --- |
+| Direct recursive search | [`benchmarks/versions/EdgeAlign_direct.py`](benchmarks/versions/EdgeAlign_direct.py) |
+| Endpoint-orientation search (Alg. 6) | [`benchmarks/versions/EdgeAlign_algorithm6.py`](benchmarks/versions/EdgeAlign_algorithm6.py) |
 
-Each call runs in a fresh process with hash seed 0, and only the alignment call is timed. The driver reports medians of three runs, stops each method/family at its first 60-second timeout, and saves all attempts, inputs, source hashes and summaries in a new output directory. Existing directories are never overwritten. Options include `--runs`, `--timeout`, and `--max-n`. The timeout uses POSIX `signal.setitimer`; on Windows use WSL.
+The command selects these files automatically. It works with a normal clone, a shallow clone, or a ZIP download; no Git commands or revision selection are needed. Their recorded revision IDs and checksums are retained in [`versions.json`](benchmarks/appendix_b/versions.json) for provenance.
+
+Each call runs in a fresh process with hash seed 0, and only the alignment call is timed. The driver reports medians of three runs, stops each method/family at its first 60-second timeout, and saves all attempts, inputs, source hashes and summaries in `tree-pairs-rerun/`. Existing directories are never overwritten; use `--output another-directory` for another run. Options include `--runs`, `--timeout`, and `--max-n`. The timeout uses POSIX `signal.setitimer`; on Windows use WSL.
 
 The [original Appendix B records](benchmarks/appendix_b/README.md) contain all 100 attempts (96 completions and four timeouts), exact inputs, summaries, protocol and environment provenance. Measurements used Python **3.13.7** on an Apple M4 Pro with 64 GiB RAM; hardware, OS and package details were recovered from the earlier same-environment archive, as documented there. Absolute timings depend on the machine. These are the original observations, not new measurements.
 
@@ -66,6 +64,7 @@ The [original Appendix B records](benchmarks/appendix_b/README.md) contain all 1
 | `examples/showcase_expected.json` | Verified alignment columns, incidence records and progressive scores for that example, with provenance. |
 | `tests/test_correctness.py` | Regression checks for projection, incidence, labels, unmatched components and error propagation. |
 | `benchmarks/tree_pairs.py` | Driver for the synthetic tree-pair runtime benchmark of Appendix B. |
+| `benchmarks/versions/` | Frozen Direct and Algorithm 6 implementations used in Figure B1. |
 | `benchmarks/appendix_b/` | Original Appendix B inputs, timing/timeout records, measured revisions and environment details. |
 | `smilesToInput.py` | Optional SMILES-to-input conversion and labelled molecule drawing. |
 | `smilesToInput-withHighlight.py` | Optional molecule drawing with alignment-based highlights from an INFO log. |

@@ -1,7 +1,8 @@
 """Appendix B tree pairs, with the original inputs and timing protocol.
 
-Run from the repository root. See benchmarks/appendix_b/README.md for the
-measured revisions, original records, and commands for comparing both versions.
+Run ``python benchmarks/tree_pairs.py`` from the repository root to compare
+the two frozen versions in benchmarks/versions/. See benchmarks/appendix_b/
+README.md for the original records and measurement protocol.
 """
 import argparse
 import hashlib
@@ -79,8 +80,11 @@ def summarize(rows):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--module", type=Path, default=Path(__file__).resolve().parents[1] / "EdgeAlign.py")
-    parser.add_argument("--baseline", type=Path, help="direct recursive version; enables the matched comparison")
+    versions = Path(__file__).resolve().parent / "versions"
+    parser.add_argument("--module", type=Path, default=versions / "EdgeAlign_algorithm6.py",
+                        help="Algorithm 6 module (default: frozen benchmark version)")
+    parser.add_argument("--baseline", type=Path, default=versions / "EdgeAlign_direct.py",
+                        help="direct recursive module (default: frozen benchmark version)")
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--timeout", type=float, default=60, help="seconds per alignment call")
     parser.add_argument("--max-n", type=int, default=40)
@@ -88,9 +92,7 @@ def main():
     args = parser.parse_args()
     if args.runs < 1 or args.timeout <= 0 or args.max_n < 3:
         parser.error("require --runs >= 1, --timeout > 0, and --max-n >= 3")
-    modules = {"algorithm6": args.module.resolve()}
-    if args.baseline:
-        modules = {"before": args.baseline.resolve(), **modules}
+    modules = {"before": args.baseline.resolve(), "algorithm6": args.module.resolve()}
     for path in modules.values():
         if not path.is_file():
             parser.error(f"module does not exist: {path}")
