@@ -1,0 +1,362 @@
+[
+  {
+    "method": "before",
+    "case": "pair_C_3",
+    "n": 3,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.002283375011757016,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_3",
+    "n": 3,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.00024404199211858213,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_3",
+    "n": 3,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0008253749983850867,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_3",
+    "n": 3,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.00011966598685830832,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_C_4",
+    "n": 4,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.015104749996680766,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_4",
+    "n": 4,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0010529170103836805,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_4",
+    "n": 4,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0018772499752230942,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_4",
+    "n": 4,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.00017741697956807911,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_C_5",
+    "n": 5,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.1531483749859035,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_5",
+    "n": 5,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.005953207990387455,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_5",
+    "n": 5,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.01312870901892893,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_5",
+    "n": 5,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0005325000092852861,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_C_6",
+    "n": 6,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 1.5574627500027418,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_6",
+    "n": 6,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.033844666002551094,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_6",
+    "n": 6,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.09767195797758177,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_6",
+    "n": 6,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0014147910114843398,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_C_7",
+    "n": 7,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 16.82481912500225,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_7",
+    "n": 7,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.20250054201460443,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_7",
+    "n": 7,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.2901752920006402,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_7",
+    "n": 7,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.0030742920062039047,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_C_8",
+    "n": 8,
+    "family": "uniform",
+    "completed": 0,
+    "attempts": 1,
+    "median_seconds": null,
+    "timeout": true
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_8",
+    "n": 8,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 1.2419722499907948,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_8",
+    "n": 8,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 4.138549625000451,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_8",
+    "n": 8,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.015172208019066602,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_9",
+    "n": 9,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 7.659436707996065,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_10",
+    "n": 10,
+    "family": "uniform",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 48.240725166979246,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_C_11",
+    "n": 11,
+    "family": "uniform",
+    "completed": 0,
+    "attempts": 1,
+    "median_seconds": null,
+    "timeout": true
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_9",
+    "n": 9,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.04605895798886195,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_10",
+    "n": 10,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.10520900000119582,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_11",
+    "n": 11,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 0.5493830000050366,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_12",
+    "n": 12,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 1.757366457983153,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_13",
+    "n": 13,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 4.1216285830014385,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_14",
+    "n": 14,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 23.725970125000458,
+    "timeout": false
+  },
+  {
+    "method": "algorithm6",
+    "case": "pair_CNO_15",
+    "n": 15,
+    "family": "CNO",
+    "completed": 0,
+    "attempts": 1,
+    "median_seconds": null,
+    "timeout": true
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_9",
+    "n": 9,
+    "family": "CNO",
+    "completed": 3,
+    "attempts": 3,
+    "median_seconds": 35.59355545800645,
+    "timeout": false
+  },
+  {
+    "method": "before",
+    "case": "pair_CNO_10",
+    "n": 10,
+    "family": "CNO",
+    "completed": 0,
+    "attempts": 1,
+    "median_seconds": null,
+    "timeout": true
+  }
+]

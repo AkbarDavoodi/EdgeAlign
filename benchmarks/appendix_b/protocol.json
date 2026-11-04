@@ -1,0 +1,16 @@
+{
+  "limit": 60,
+  "repeats": 3,
+  "python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+  "hash_seed": 0,
+  "timing": "alignment call only; imports and independent validation excluded",
+  "order": "serial; before/algorithm6 alternated between repeats on shared sizes",
+  "stopping": "stop repetitions at first timeout; stop extending a family at its first timeout",
+  "extension": "integer edge counts from 9; safety ceiling n=40 per family",
+  "sources": {
+    "before": "cfe1d901729410ac893b11477eea76039a049b076298bd6d1af3381a01840436",
+    "algorithm6": "555bafbe6ba8770b7ee18caf27df8b792d4214600841a26f6b776c3da4913952"
+  },
+  "earlier_prototype_extension": "C/N/O family also extended from n=9 until its first timeout, after the serial Algorithm 6 campaign; identical timing and validation",
+  "versions": "before: current correctness-repaired repository prototype; algorithm6: only find_best_alignment body replaced"
+}

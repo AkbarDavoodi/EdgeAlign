@@ -35,20 +35,26 @@ Appendix B of the paper reports a comparison with a direct recursive prototype t
 
 The benchmark uses a path on vertices `0, ..., n` and a second tree obtained by replacing edge `{n-1, n}` with `{1, n}`. Edge labels are uniform; vertex labels are either uniform or repeat C/N/O in vertex-index order. The paper reports medians of three runs and a 60-second timeout. The completed ranges increase from 7 to 10 edges per input for uniform labels and from 9 to 14 for repeating C/N/O labels. Runtime still grows rapidly; the prototype is intended as a reference implementation. Further exploitation of E-graph structure is future work.
 
-A driver for reproducing the benchmark setup described in Appendix B is provided in `benchmarks/tree_pairs.py`. Run it from the repository root:
+A driver for the original Appendix B input and timing protocol is provided in `benchmarks/tree_pairs.py`. Run the current implementation from the repository root:
 
 ```bash
-python benchmarks/tree_pairs.py
+python benchmarks/tree_pairs.py --output /tmp/edgealign-tree-pairs-rerun
 ```
 
-It generates the tree pairs for `n = 3, 4, ...`, aligns each pair with the implementation in `EdgeAlign.py`, prints the median of three runs per instance and stops a series at its first 60-second timeout (options: `--runs`, `--timeout`, `--max-n`). The direct recursive prototype of Appendix B is the `EdgeAlign.py` of git commit `7b0ef3b` (the revision immediately before the endpoint-orientation search was introduced). To time it on the same instances, extract that revision and pass it to the driver:
+The two measured versions are `EdgeAlign.py` at commits [`7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb`](https://github.com/AkbarDavoodi/EdgeAlign/blob/7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb/EdgeAlign.py) (direct recursive search, including correctness fixes) and [`ceaa0db28806dffd5a0c09286fe9e97b526a233a`](https://github.com/AkbarDavoodi/EdgeAlign/blob/ceaa0db28806dffd5a0c09286fe9e97b526a233a/EdgeAlign.py) (Algorithm 6). Both remain available in the Git history. To compare these exact revisions:
 
 ```bash
-git show 7b0ef3b:EdgeAlign.py > /tmp/EdgeAlign_direct.py
-python benchmarks/tree_pairs.py --module /tmp/EdgeAlign_direct.py
+benchmark_dir=$(mktemp -d)
+git show 7b0ef3beb0ae1bddbbb1db7a0a7739a4fed273bb:EdgeAlign.py > "$benchmark_dir/EdgeAlign_direct.py"
+git show ceaa0db28806dffd5a0c09286fe9e97b526a233a:EdgeAlign.py > "$benchmark_dir/EdgeAlign_algorithm6.py"
+PYTHONHASHSEED=0 PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg python benchmarks/tree_pairs.py \
+  --baseline "$benchmark_dir/EdgeAlign_direct.py" --module "$benchmark_dir/EdgeAlign_algorithm6.py" \
+  --output "$benchmark_dir/results"
 ```
 
-The timeout uses `signal.alarm`, so the driver runs on Linux and macOS; on Windows use WSL. Absolute timings depend on the machine; the values in the paper were measured as described in Appendix B.
+Each call runs in a fresh process with hash seed 0, and only the alignment call is timed. The driver reports medians of three runs, stops each method/family at its first 60-second timeout, and saves all attempts, inputs, source hashes and summaries in a new output directory. Existing directories are never overwritten. Options include `--runs`, `--timeout`, and `--max-n`. The timeout uses POSIX `signal.setitimer`; on Windows use WSL.
+
+The [original Appendix B records](benchmarks/appendix_b/README.md) contain all 100 attempts (96 completions and four timeouts), exact inputs, summaries, protocol and environment provenance. Measurements used Python **3.13.7** on an Apple M4 Pro with 64 GiB RAM; hardware, OS and package details were recovered from the earlier same-environment archive, as documented there. Absolute timings depend on the machine. These are the original observations, not new measurements.
 
 ### Repository files
 
@@ -60,6 +66,7 @@ The timeout uses `signal.alarm`, so the driver runs on Linux and macOS; on Windo
 | `examples/showcase_expected.json` | Verified alignment columns, incidence records and progressive scores for that example, with provenance. |
 | `tests/test_correctness.py` | Regression checks for projection, incidence, labels, unmatched components and error propagation. |
 | `benchmarks/tree_pairs.py` | Driver for the synthetic tree-pair runtime benchmark of Appendix B. |
+| `benchmarks/appendix_b/` | Original Appendix B inputs, timing/timeout records, measured revisions and environment details. |
 | `smilesToInput.py` | Optional SMILES-to-input conversion and labelled molecule drawing. |
 | `smilesToInput-withHighlight.py` | Optional molecule drawing with alignment-based highlights from an INFO log. |
 
@@ -67,7 +74,7 @@ The timeout uses `signal.alarm`, so the driver runs on Linux and macOS; on Windo
 
 ### Prerequisites
 
-- **Python:** Python 3.12 is recommended; the reviewed implementation was checked with Python 3.12.14.
+- **Python:** Python 3.12 is recommended; the reviewed implementation was checked with Python 3.12.14. This compatibility check is separate from the Appendix B measurements, which used Python 3.13.7.
 - **Required Packages:**  
   - `networkx`
   - `matplotlib`
